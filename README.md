@@ -48,7 +48,8 @@ sudo make install
 ## Configuration
 After starting the application you can do a few things:
 - Connect to an account manager in the project menu
-- Add other boinc hosts to control
+- Attach to projects manually
+- Add other BOINC hosts to control
 - Configure displayed columns and sort order
 - Configure BOINC network and run modes
 
