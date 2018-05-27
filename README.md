@@ -23,7 +23,6 @@ Additionally other changes from around GitHub have been merged into this fork:
 - & other code improvements
 
 ## Compiling
-
 Dead easy, but you'll need to install a few libraries first. Here's some instructions 
 for Raspbian, which is what I'm doing this on. I have no idea if the package names are 
 different on other distributions.
@@ -47,20 +46,30 @@ sudo make install
 ```
 
 ## Configuration
+After starting the application you can do a few things:
+- Connect to an account manager in the project menu
+- Add other boinc hosts to control
+- Configure displayed columns and sort order
+- Configure BOINC network and run modes
 
+All of these options are in the menus (M key or F9) and are self-explanatory.
 
-
-## Operation
-
-
+## Hot key operation
+N - Show next host in the list
+C - Configure host list
+V - View statistics
+Arrow keys - Navigate task list and menus
+S - Suspend selected task
+R - Resume (or queue) selected task
+A - Abort selected task (requires confirmation)
+Enter - View extended info for a task
+Q - Quit boinctui (hit Escape to close windows first)
 
 ## Issues
-
 Nothing specific, but I've had a few segmentation faults with the original codebase 
 so it needs a good pruning by someone who actually knows C++ - maybe that's you!?
 
 ## Acknowledgments
-
 Additions to the original codebase are from the following GitHub users:
 - DerVerruckteFuchs - transparent backgrounds
 - zeekec - improved time display, menu hot key, and some code & build improvements
