@@ -18,6 +18,8 @@
 #include <string.h>
 #include <algorithm>
 #include <sstream>
+#include <iomanip>
+
 #include "taskwin.h"
 #include "net.h"
 #include "resultparse.h"
@@ -220,7 +222,8 @@ std::string getresultstatestr(Item* result)
 std::string gethumanreadabletimestr(time_t time) //получить в виде строки прогнозируемое время завершения задачи
 {
     std::stringstream s;
-    time_t value = time; //секунды
+    s << std::fixed << std::setprecision(1);
+    double value = time; //секунды
     if (value == 0)
         s << "- ";
     else
@@ -477,12 +480,12 @@ void TaskWin::updatedata() //обновить данные с сервера
 			if ( ( sstate == "Run" )&&( dtime < 600)&&( dtime >= 0 ) ) //осталось [0-600[ сек
 			    attr2 = getcolorpair(COLOR_RED,COLOR_BLACK) | A_BOLD;
 			if ( dtime >= 0)
-			    cs->append(attr2," %4s", gethumanreadabletimestr(dtime).c_str()); //естимейт
+			    cs->append(attr2," %6s", gethumanreadabletimestr(dtime).c_str()); //естимейт
 			else
-			    cs->append(attr2," %4s", "?"); //естимейт отрицательный (BOINC bug?)
+			    cs->append(attr2," %6s", "?"); //естимейт отрицательный (BOINC bug?)
 		    }
 		    else
-			cs->append(attr2," %4s", "?");
+			cs->append(attr2," %6s", "?");
 		}
 		//колонка 5 время дедлайн
 		if(iscolvisible(column++))
@@ -495,10 +498,10 @@ void TaskWin::updatedata() //обновить данные с сервера
 			double beforedl = dtime - time(NULL); //число секунд до дедлайна
 			if ( ( sstate != "Done")&&( beforedl < 3600 * 24 * 2) ) //осталось меньше 2-х дней
 			    attr2 = getcolorpair(COLOR_BLUE,COLOR_BLACK) | A_BOLD;
-			cs->append(attr2," %4s", (beforedl>0) ? gethumanreadabletimestr(beforedl).c_str() : "dead");
+			cs->append(attr2," %6s", (beforedl>0) ? gethumanreadabletimestr(beforedl).c_str() : "dead");
 		    }
 		    else
-			cs->append(attr2," %4s", "?");
+			cs->append(attr2," %6s", "?");
 		}
 		//колонка 6 имя приложения
 		if(iscolvisible(column++))

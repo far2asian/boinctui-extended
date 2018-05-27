@@ -46,8 +46,8 @@ MainWin::MainWin(NRect rect/*, Config* cfg*/) : NGroup(rect)
     colname.push_back("state ");
     colname.push_back("   done%%");
     colname.push_back("  project             ");
-    colname.push_back("  est");
-    colname.push_back("  d/l");
+    colname.push_back("    est");
+    colname.push_back("    d/l");
     colname.push_back("  application                   ");
     colname.push_back("  task");
     tablheader = new NStaticText(NRect(1, rect.cols -2-(INFPANWIDTH)-1, 1, 1));
