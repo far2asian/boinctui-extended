@@ -55,15 +55,15 @@ After starting the application you can do a few things:
 All of these options are in the menus (M key or F9) and are self-explanatory.
 
 ## Hot key operation
-N - Show next host in the list
-C - Configure host list
-V - View statistics
-Arrow keys - Navigate task list and menus
-S - Suspend selected task
-R - Resume (or queue) selected task
-A - Abort selected task (requires confirmation)
-Enter - View extended info for a task
-Q - Quit boinctui (hit Escape to close windows first)
+- N - Show next host in the list
+- C - Configure host list
+- V - View statistics
+- Arrow keys - Navigate task list and menus
+- S - Suspend selected task
+- R - Resume (or queue) selected task
+- A - Abort selected task (requires confirmation)
+- Enter - View extended info for a task
+- Q - Quit boinctui (hit Escape to close windows first)
 
 ## Issues
 Nothing specific, but I've had a few segmentation faults with the original codebase 
