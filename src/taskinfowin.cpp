@@ -290,10 +290,10 @@ void TaskInfoWin::updatedata()
     std::vector<std::pair<std::string, std::string> >::iterator it;
     for (it = ss.begin(); it!=ss.end(); it++)
     {
-	int varcolor = getcolorpair(COLOR_WHITE, COLOR_BLACK) | A_BOLD;
-	int valcolor = getcolorpair(COLOR_WHITE, COLOR_BLACK) | A_BOLD;
+	int varcolor = getcolorpair(COLOR_WHITE, -1) | A_BOLD;
+	int valcolor = getcolorpair(COLOR_WHITE, -1) | A_BOLD;
 	if ((FindVar(ssbak, (*it).first) != (*it).second)&&(!ssbak.empty()))
-	    valcolor = getcolorpair(COLOR_CYAN, COLOR_BLACK) | A_BOLD;
+	    valcolor = getcolorpair(COLOR_CYAN, -1) | A_BOLD;
 
 	NColorString* cs = new NColorString(varcolor, "%-*s   ", maxlen1, (*it).first.c_str());
 	cs->append(valcolor, "%s\n", (*it).second.c_str());

@@ -63,7 +63,7 @@ void InfoPanel::refresh()
 	NView::refresh();
 	return;
     }
-    wattrset(win,getcolorpair(COLOR_WHITE,COLOR_BLACK));
+    wattrset(win,getcolorpair(COLOR_WHITE,-1));
     wattron(win, A_REVERSE);
     mvwprintw(win,0,0,"       Tasks        ");
     wattroff(win, A_REVERSE);
@@ -154,14 +154,14 @@ void InfoPanel::refresh()
 	if ( ( getheight()-line ) < needlines )
 	    break; //не выводим если осталось мало строк
 	//вывод на экран о проекте
-	wattrset(win,getcolorpair(COLOR_YELLOW,COLOR_BLACK));
+	wattrset(win,getcolorpair(COLOR_YELLOW,-1));
 	mvwprintw(win,line++,0,"%s\n",projects[i].name.c_str());
 	if (!projects[i].sstatus.empty())
 	{
-	    wattrset(win,getcolorpair(COLOR_RED,COLOR_BLACK));
+	    wattrset(win,getcolorpair(COLOR_RED,-1));
 	    mvwprintw(win,line++,0,"%s\n",projects[i].sstatus.c_str());
 	}
-	wattrset(win,getcolorpair(COLOR_WHITE,COLOR_BLACK));
+	wattrset(win,getcolorpair(COLOR_WHITE,-1));
 	if ( (!compact)||(abs(projects[i].user - projects[i].host) > 1) )
 	{
 	    mvwprintw(win,line++,0,"user total%10.0f\n",projects[i].user);

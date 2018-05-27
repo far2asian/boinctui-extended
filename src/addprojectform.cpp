@@ -103,7 +103,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	f = addfield(new_field(1, getwidth()-4, line++, 1, 0, 0));
 	if (E_OK != set_field_buffer(f, 0, s.c_str()))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -117,7 +117,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, s.c_str()))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -131,7 +131,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, s.c_str()))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -145,7 +145,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, s.c_str()))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -163,7 +163,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, s.c_str()))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -191,7 +191,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, s.c_str()))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -204,7 +204,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_buffer(f, 0, "email"))
 	ERROREX();
-    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	ERROREX();
     if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	ERROREX();
@@ -223,7 +223,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_buffer(f, 0, "password"))
 	ERROREX();
-    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	ERROREX();
     if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	ERROREX();
@@ -244,7 +244,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, "username"))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -263,7 +263,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_buffer(f, 0, "teamname"))
 	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	    ERROREX();
@@ -283,7 +283,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_buffer(f, 0, "Enter-Ok    Esc-Cancel"))
 	ERROREX();
-    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_BLACK) | A_BOLD))
+    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	ERROREX();
     if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
 	ERROREX();
