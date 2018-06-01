@@ -1,11 +1,8 @@
 # boinctui
 Original code by Sergey Suslov (suleman1971@gmail.com)  
 Improved build by Mark Pentler (https://github.com/mpentler/)  
-- Incorporates various community changes from around GitHub (full list at the bottom)
-- Documentation added
 
 ## Introduction
-
 boinctui is an curses-based terminal BOINC client manager for Linux. Features include:
 - Fullscreen curses-based text user interface
 - Switch between several hosts running the BOINC client via a hot key
@@ -20,7 +17,8 @@ Additionally other changes from around GitHub have been merged into this fork:
 - Transparent backgrounds supported
 - Added another hot key to bring up the menu in case of double-assignment
 - Increased precision of time displays
-- & other code improvements
+- Code comments are being translated into English to assist in working with the codebase
+- & other code improvements (cppcheck and build environment stuff)
 
 ## Compiling
 Dead easy, but you'll need to install a few libraries first. Here's some instructions 
@@ -56,6 +54,7 @@ After starting the application you can do a few things:
 All of these options are in the menus (M key or F9) and are self-explanatory.
 
 ## Hot key operation
+- M/F9 - Open menus
 - N - Show next host in the list
 - C - Configure host list
 - V - View statistics
