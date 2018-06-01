@@ -54,7 +54,7 @@
 #define M_SORT_BY_DL			"Sort by deadline"
 #define M_SORT_BY_APP			"Sort by application"
 #define M_SORT_BY_TASK			"Sort by task name"
-#define M_ASCII_LINE_DRAW		"ASCII line draw"
+#define M_ASCII_LINE_DRAW		"ASCII line drawing mode"
 //Названия пунктов меню "Projects"
 #define M_ADD_PROJECT			"Add project"
 #define M_CONNECT_MANAGER		"Connect to account manager"

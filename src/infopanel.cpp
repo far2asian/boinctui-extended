@@ -40,7 +40,7 @@ Item* findDay( std::vector<Item*>& days, time_t d ) //ищем в статист
 }
 
 
-std::string InfoPanel::getdayname(time_t ltime) //название дня "today" "yesterday" ""
+std::string InfoPanel::getdayname(time_t ltime) // Name of the day ("today", "yesterday" etc)
 {
     time_t now = time(NULL);
     if ( now/(3600 * 24) == ltime/(3600 * 24) )
@@ -82,13 +82,13 @@ void InfoPanel::refresh()
     mvwprintw(win,8,0, "total     %8.2fGb",dtotal/(1024*1024*1024));
     mvwprintw(win,9,0, "free      %8.2fGb",dfree/(1024*1024*1024));
     mvwprintw(win,10,0,"allowed   %8.2fGb",dallowed/(1024*1024*1024));
-    mvwprintw(win,11,0,"boinc     %8.2fGb",dboinc/(1024*1024*1024));
+    mvwprintw(win,11,0,"in use    %8.2fGb",dboinc/(1024*1024*1024));
 
     wattron(win,A_REVERSE);
     mvwprintw(win,12,0,"     Statistics     ");
     wattroff(win,A_REVERSE);
 
-    bool compact = true; //компактный вывод статистики если user=host
+    bool compact = true; // Compact stats output if user=host
     int line,col;
     getyx(win,line,col);
     if ( (!compact)||(std::abs(usertotal - hosttotal) > 1) )
@@ -134,11 +134,11 @@ void InfoPanel::refresh()
 	    mvwaddch(win,line++,0,ACS_LLCORNER); waddch(win,ACS_HLINE); wprintw(win,">daily  %10.0f\n",lastdayhost);
 	}
     }
-    //по проектам
+    // Projects
     mvwprintw(win, line++,0,"\n");
-    for (int i = 0; i < projects.size(); i++) //цикл по названиям проектов
+    for (int i = 0; i < projects.size(); i++) // Iterate through projects
     {
-	//расчитываем нужное кол-во строк
+	// Calculate how many rows are needed
 	int needlines = 2;
 	if (!projects[i].sstatus.empty())
 	    needlines++;
@@ -150,10 +150,10 @@ void InfoPanel::refresh()
 	    needlines += 2;
 	else
 	    needlines++;
-	//проверяем сколько свободных строк осталось в окне
+	// Check how many lines are left in the window
 	if ( ( getheight()-line ) < needlines )
-	    break; //не выводим если осталось мало строк
-	//вывод на экран о проекте
+	    break; // Do not print if there are few lines left
+	// Output project details
 	wattrset(win,getcolorpair(COLOR_YELLOW,-1));
 	mvwprintw(win,line++,0,"%s\n",projects[i].name.c_str());
 	if (!projects[i].sstatus.empty())
@@ -198,7 +198,7 @@ void InfoPanel::refresh()
 	}
     }
     if ( line < getheight() )
-	wclrtobot(win); //чистим нижню часть окна (если не это не последняя строка иначе сотрем символ в правом нижнем)
+	wclrtobot(win); // Clear the bottom of the window (if this is not the last line, otherwise erase the symbol in the lower right)
     NView::refresh();
 }
 
@@ -207,7 +207,7 @@ void InfoPanel::updatedata()
 {
     if (srv == NULL)
 	return;
-    //===данные по процессам===
+    // ===Process data===
     if (srv->statedom.empty())
 	return;
     Item* tmpstatedom = srv->statedom.hookptr();
@@ -221,7 +221,7 @@ void InfoPanel::updatedata()
         std::vector<Item*> results = client_state->getItems("result");
 	std::vector<Item*>::iterator it;
 	nalltasks = results.size();
-	for (it = results.begin(); it!=results.end(); it++) //цикл списка задач
+	for (it = results.begin(); it!=results.end(); it++) // Task list cycle
 	{
 	    Item* ready_to_report = (*it)->findItem("ready_to_report");
 	    if (ready_to_report != NULL)
@@ -238,11 +238,11 @@ void InfoPanel::updatedata()
 		if (ready_to_report == NULL)
 		    nqueuetasks++;
 	    }
-	} //цикл списка задач
+	} // Task list cycle
 	nothertasks = nalltasks-nruntasks-ndonetasks-nqueuetasks;
 	needrefresh = true;
     }
-    //===данные по дискам===
+    // ===Disk Data===
     if (srv->dusagedom.empty())
     {
 	srv->statedom.releaseptr(tmpstatedom);
@@ -258,12 +258,12 @@ void InfoPanel::updatedata()
 	dallowed = disk_usage_summary->findItem("d_allowed")->getdvalue();
         std::vector<Item*> results = disk_usage_summary->getItems("project");
 	std::vector<Item*>::iterator it;
-	for (it = results.begin(); it!=results.end(); it++) //цикл списка задач
+	for (it = results.begin(); it!=results.end(); it++) // Task list cycle
 	{
 	    dboinc = dboinc + (*it)->findItem("disk_usage")->getdvalue();
 	}
     }
-    //===данные статистики===
+    // ===Statistics===
     if (srv->statisticsdom.empty())
     {
 	srv->statedom.releaseptr(tmpstatedom);
@@ -290,12 +290,12 @@ void InfoPanel::updatedata()
     {
 	std::vector<Item*> project_statistics = statistics->getItems("project_statistics");
 	std::vector<Item*>::iterator it;
-	for (it = project_statistics.begin(); it!=project_statistics.end(); it++) //цикл списка проектов
+	for (it = project_statistics.begin(); it!=project_statistics.end(); it++) // Project list cycle
 	{
 	    ProjectStat st; //заполнить эту структуру
 	    st.name = srv->findProjectName(tmpstatedom,((*it)->findItem("master_url")->getsvalue()));
 	    st.sstatus = "";
-	    //строка статуса
+	    // Status line
 	    if (!srv->statedom.empty())
 	    {
 		Item* project = srv->findprojectbyname(st.name.c_str());
@@ -306,13 +306,13 @@ void InfoPanel::updatedata()
 		}
 	    }
 	    std::vector<Item*> daily_statistics = (*it)->getItems("daily_statistics"); //все дни проекта в этом векторе
-	    std::sort(daily_statistics.begin(), daily_statistics.end(), daily_statisticsCmpAbove); //сортируем по убыванию дат
+	    std::sort(daily_statistics.begin(), daily_statistics.end(), daily_statisticsCmpAbove); // Sort by descending dates
 	    if (!daily_statistics.empty())
 	    {
-		Item* lastday = findDay(daily_statistics, laststattime); //последний день
+		Item* lastday = findDay(daily_statistics, laststattime); // Last day
 		Item* predday = NULL;
-//		time_t d = lastday->findItem("day")->getdvalue(); //время из статистики
-		if ( lastday != NULL) //для этого проекта последний день есть
+//		time_t d = lastday->findItem("day")->getdvalue(); // Time from statistics
+		if ( lastday != NULL) // Find last day for this project
 		{
 		    usertotallastday = usertotallastday + lastday->findItem("user_total_credit")->getdvalue();
 		    hosttotallastday = hosttotallastday + lastday->findItem("host_total_credit")->getdvalue();
@@ -324,13 +324,13 @@ void InfoPanel::updatedata()
 //		{
 //		    predday = daily_statistics.front(); //последний день этого проекта учитываем как предыдущий
 //		}
-		//накапливаем статистику за предыдущий день (если есть)
+		// Accumupate stats for the previous day (if any)
 		if (predday != NULL)
 		{
 		    usertotalpredday = usertotalpredday + predday->findItem("user_total_credit")->getdvalue();
 		    hosttotalpredday = hosttotalpredday + predday->findItem("host_total_credit")->getdvalue();
 		}
-		//суммарно по всем дням и проектам
+		// Summary for all days and projects
 		Item* frontday = daily_statistics.front(); //берем последний несмотря на его дату
 		if (daily_statistics.size() > 1)
 		{

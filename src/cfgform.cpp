@@ -29,34 +29,34 @@ CfgForm::CfgForm(int rows, int cols/*, Config* cfg*/) : NForm(rows,cols)
 }
 
 
-void CfgForm::genfields(bool extfields) //создаст массив полей (extfields если нужно добавить хост)
+void CfgForm::genfields(bool extfields) // Create an array of fields (extfields is set if you need to add a host)
 {
     delfields();
     this->extfields = extfields;
-    //читаем из конфига
+    // Read from config
     Item* boinctui_cfg = gCfg->getcfgptr();
     if (boinctui_cfg == NULL)
 	return;
     std::vector<Item*> slist = boinctui_cfg->getItems("server");
     if (slist.empty())
 	extfields = true;
-    //поля ввода для серверов
-    nhost = slist.size(); //число хостов
+    // Input field for servers
+    nhost = slist.size(); // Number of servers
     if (extfields)
-	nhost++; //новый добавочный хост
+	nhost++; // New additional host
     std::vector<Item*>::iterator it;
-    int i  = 0; //номер хоста
-    int nl = 2; //номер экранной строки
-    //статический заголовок полей хостов
+    int i  = 0; // Host number
+    int nl = 2; // Screen line number
+    // Static field header for hosts
     FIELD* field   = addfield(new_field(1, 44, nl, 5, 0, 0));
-    field_opts_off(field, O_ACTIVE); //статический текст
+    field_opts_off(field, O_ACTIVE); // Static text
     set_field_buffer(field, 0, "host             port   pwd");
     set_field_back(field, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
     nl = nl + 1;
-    //поля для хостов
-    for (i = 0; i < nhost; i++) //цикл по хостам
+    // Fields for hosts
+    for (i = 0; i < nhost; i++) // Loop through hosts
     {
-	//поле для хоста
+	// Host field
 	field = addfield(new_field(1, 15, nl,   5, 0, 0));
 	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
 	field_opts_off(field, O_AUTOSKIP);
@@ -70,8 +70,8 @@ void CfgForm::genfields(bool extfields) //создаст массив полей
 		set_field_buffer(field, 0, host->getsvalue());
 	}
 	if (i == 0)
-	    set_current_field(frm, field); //фокус на поле
-	//поле для порта
+	    set_current_field(frm, field); // Set field focus
+	// Port field
 	field = addfield(new_field(1, 5, nl, 17+5, 0, 0));
 	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
 	set_field_type(field, TYPE_INTEGER, 0, 0, 65535);
@@ -82,7 +82,7 @@ void CfgForm::genfields(bool extfields) //создаст массив полей
 	    if (port != NULL)
 		set_field_buffer(field, 0, port->getsvalue());
 	}
-	//поле для пароля
+	// Password field
 	field = addfield(new_field(1, 20, nl, 29, 0, 0));
 	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
 	field_opts_off(field, O_AUTOSKIP);
@@ -96,25 +96,25 @@ void CfgForm::genfields(bool extfields) //создаст массив полей
 	}
 	nl = nl + 2;
     }
-    //клавиши упр-я
+    // Control keys
     nl++;
     field = addfield(new_field(1, 44, nl, 5, 0, 0));
-    field_opts_off(field, O_ACTIVE); //статический текст
+    field_opts_off(field, O_ACTIVE); // Static text
     if (extfields)
 	set_field_buffer(field, 0, "Esc-Cancel   Enter-Accept");
     else
 	set_field_buffer(field, 0, "Esc-Cancel   Enter-Accept   Ins-Add host");
     set_field_back(field, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
     nl = nl + 2;
-    //финализация списка полей
+    // Finalise the list of fields
     addfield(NULL);
-    //пересчитываем высоту формы, чтобы влезли все поля и центрируем
+    // Recalculaye form height so everything looks right
     resize(nl + 2,getwidth());
     move(getmaxy(stdscr)/2-getheight()/2,getmaxx(stdscr)/2-getwidth()/2);
 }
 
 
-void CfgForm::eventhandle(NEvent* ev) 	//обработчик событий
+void CfgForm::eventhandle(NEvent* ev) // Event handler
 {
     if ( ev->done )
 	return;
@@ -140,15 +140,15 @@ void CfgForm::eventhandle(NEvent* ev) 	//обработчик событий
 		}
 		break;
 	    case KEY_ENTER:
-	    case '\n': //ENTER
+	    case '\n': // Enter
 	    {
-		form_driver(frm, REQ_NEXT_FIELD); //костыль чтобы текущее поле не потеряло значение
+		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
 		kLogPrintf("ENTER\n");
-		updatecfg(); //обновить данные в cfg
-		gCfg->save(); //сохранить на диск
+		updatecfg(); // Update data in config
+		gCfg->save(); // Save to disk
 		//gsrvlist->refreshcfg();
 		//ev->keycode = 27; //костыль чтобы осн программа сдестркутила форму конфига
-		NEvent* event = new TuiEvent(evCFGCH);//NEvent(NEvent::evPROG, 1); //создаем програмное событие
+		NEvent* event = new TuiEvent(evCFGCH);//NEvent(NEvent::evPROG, 1); // Create a software event
 		putevent(event);
 		break;
 	    }
@@ -166,23 +166,23 @@ void CfgForm::eventhandle(NEvent* ev) 	//обработчик событий
 }
 
 
-void	CfgForm::updatecfg() //сохраняет данные из формы в cfg
+void	CfgForm::updatecfg() // Saves data from form to config
 {
     Item* boinctui_cfg = gCfg->getcfgptr();
     if (boinctui_cfg == NULL)
 	return;
     if (fields == NULL)
 	return;
-    //удаляем все старые записи "server" из конфига
+    // Delete all old server entries from the config
     std::vector<Item*> slist = boinctui_cfg->getItems("server");
     std::vector<Item*>::iterator it;
     for (it = slist.begin(); it != slist.end(); it++)
 	boinctui_cfg->delsubitem(*it);
-    //создаем новые записи
+    // Create new records
     //int n = field_count(frm);
-    for (int i = 0; i < nhost; i++) //хосты из формы
+    for (int i = 0; i < nhost; i++) // Cycle through hosts from form
     {
-	int nf = 1 + i*3; //номер поля для имени хоста
+	int nf = 1 + i*3; // Hostname field number
 	char* shost = rtrim(field_buffer(fields[nf],0));
 	char* sport = rtrim(field_buffer(fields[nf+1],0));
 	char* spwd  = rtrim(field_buffer(fields[nf+2],0));

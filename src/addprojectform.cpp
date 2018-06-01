@@ -28,7 +28,7 @@
 #define ERROREX(msg)   throw __FILE__ ":" XSTR(__LINE__) "[" msg "]";
 
 
-char* strupcase(char* s) //в верхний регистр
+char* strupcase(char* s) // To upper case
 {
     char	*p;
     for (p = s; *p != '\0'; p++)
@@ -37,7 +37,7 @@ char* strupcase(char* s) //в верхний регистр
 }
 
 
-char* strlowcase(char* s) //в нижний регистр
+char* strlowcase(char* s) // To lower case
 {
     char	*p;
     for (p = s; *p != '\0'; p++)
@@ -56,16 +56,16 @@ AddProjectForm::AddProjectForm(int rows, int cols,  Srv* srv, const char* projna
     if (srv !=NULL)
 	project = srv->findprojectbynamefromall(projname);
     int row = 0;
-    //поля
+    // Margins
     try
     {
 	genfields(row,project);
     }
     catch(const char* err)
     {
-	kLogPrintf("ERROR EXCAPTION %s\n",err);
+	kLogPrintf("ERROR EXCEPTION %s\n",err);
     }
-    //пересчитываем высоту формы, чтобы влезли все поля и центрируем
+    // Recalculate the height of the form, so that all the fields look right
     int r,c =0;
     scale_form(frm, &r, &c);
     kLogPrintf("field_count=%d scale_form()->%d,%d\n", field_count(frm), r, c);
@@ -75,24 +75,24 @@ AddProjectForm::AddProjectForm(int rows, int cols,  Srv* srv, const char* projna
 }
 
 
-void AddProjectForm::genfields(int& line, Item* project) //создаст массив полей
+void AddProjectForm::genfields(int& line, Item* project) // Create an array of fields
 {
     FIELD* f;
     delfields();
     if (project != NULL)
     {
-	//сообщение об ошибке
+	// Error message
 	errmsgfield = getfieldcount();
 	f = addfield(new_field(1, getwidth()-2, line++, 0, 0, 0));
 	if (!f)
 	    ERROREX();
-	if (E_OK != set_field_buffer(f, 0, "Errr"))
+	if (E_OK != set_field_buffer(f, 0, "Error"))
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_VISIBLE)) //по умолчанию невидима
+	if (E_OK != field_opts_off(f, O_VISIBLE)) // Default is invisible
 	    ERROREX();
 	//url
 	Item* url = project->findItem("url");
@@ -105,9 +105,9 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	//area
+	// Major project category
 	Item* general_area = project->findItem("general_area");
 	s = "General area : ";
 	if (general_area !=NULL)
@@ -119,9 +119,9 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	//specific area
+	// Minor project category
 	Item* specific_area = project->findItem("specific_area");
 	s = "Specific area: ";
 	if (specific_area !=NULL)
@@ -133,9 +133,9 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	//home
+	// Project location
 	s = "Home         : ";
 	Item* home = project->findItem("home");
 	if (home !=NULL)
@@ -147,9 +147,9 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	//description
+	// Project description
 	s = "Description  : ";
 	line++;
 	Item* description = project->findItem("description");
@@ -165,15 +165,15 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
 	line += h+1;
-	//platforms
+	// Project's supported platforms
 	Item* platforms = project->findItem("platforms");
 	s = "Platforms    : ";
 	if (platforms !=NULL)
 	{
-	    std::vector<Item*> namelist = platforms->getItems("name"); //список названий платформ
+	    std::vector<Item*> namelist = platforms->getItems("name"); // List of platform names
 	    std::vector<Item*>::iterator it;
 	    for (it = namelist.begin(); it!=namelist.end(); it++)
 	    {
@@ -193,11 +193,11 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
 	line += h + 1;
     }
-    //email
+    // Email address
     line++;
     f = addfield(new_field(1, 10, line, 1 , 0, 0));
     if (!f)
@@ -206,7 +206,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	ERROREX();
-    if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+    if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	ERROREX();
     emailfield = getfieldcount();
     f = addfield(new_field(1, 40, line++, 15, 0, 0));
@@ -216,7 +216,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD))
 	ERROREX();
-    //password
+    // Password
     line++;
     f = addfield(new_field(1, 10, line, 1 , 0, 0));
     if (!f)
@@ -225,7 +225,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	ERROREX();
-    if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+    if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	ERROREX();
     passwfield = getfieldcount();
     f = addfield(new_field(1, 40, line++, 15, 0, 0));
@@ -237,7 +237,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (!userexist)
     {
-	//user name
+	// Username
 	line++;
 	f = addfield(new_field(1, 10, line, 1 , 0, 0));
 	if (!f)
@@ -246,7 +246,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
 	usernamefield = getfieldcount();
 	f = addfield(new_field(1, 40, line++, 15, 0, 0));
@@ -256,7 +256,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD))
 	    ERROREX();
-	//team name
+	// Team name
 	line++;
 	f = addfield(new_field(1, 10, line, 1 , 0, 0));
 	if (!f)
@@ -265,7 +265,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	    ERROREX();
 	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
 	teamfield = getfieldcount();
 	f = addfield(new_field(1, 40, line++, 15, 0, 0));
@@ -276,7 +276,7 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	if (E_OK != field_opts_off(f, O_AUTOSKIP))
 	    ERROREX();
     }
-    //подсказки
+    // Control keys
     line++;
     f = addfield(new_field(1, getwidth()-25, line++, 20 , 0, 0));
     if (!f)
@@ -285,14 +285,14 @@ void AddProjectForm::genfields(int& line, Item* project) //создаст мас
 	ERROREX();
     if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
 	ERROREX();
-    if (E_OK != field_opts_off(f, O_ACTIVE)) //статический текст
+    if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	ERROREX();
-    //финализация списка полей
+    // Finalise the list of fields
     addfield(NULL);
 }
 
 
-void AddProjectForm::eventhandle(NEvent* ev) 	//обработчик событий
+void AddProjectForm::eventhandle(NEvent* ev) // Event handler
 {
     if ( ev->done )
 	return;
@@ -307,9 +307,9 @@ void AddProjectForm::eventhandle(NEvent* ev) 	//обработчик событ�
         switch(ev->keycode)
 	{
 	    case KEY_ENTER:
-	    case '\n': //ENTER
+	    case '\n': // Enter
 	    {
-		form_driver(frm, REQ_NEXT_FIELD); //костыль чтобы текущее поле не потеряло значение
+		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field doesn't lose value
 		char* email = strlowcase(rtrim(field_buffer(fields[emailfield],0)));
 		char* passw = rtrim(field_buffer(fields[passwfield],0));
 		kLogPrintf("AddProjectForm OK name=[%s] url=[%s] email=[%s]\n passw=[%s]\n", projname.c_str(), projurl.c_str(), email, passw);
@@ -317,29 +317,29 @@ void AddProjectForm::eventhandle(NEvent* ev) 	//обработчик событ�
 		{
 		    std::string errmsg;
 		    bool success = true;
-		    if (!userexist) //если аккаунта еще нет то создаем
+		    if (!userexist) // If there's no account we'll create one
 		    {
 			char* username = strlowcase(rtrim(field_buffer(fields[usernamefield],0)));
 			char* teamname = rtrim(field_buffer(fields[teamfield],0));
 			success = srv->createaccount(projurl.c_str(),email,passw, username, teamname, errmsg);
 		    }
 		    if (success)
-			success = srv->projectattach(projurl.c_str(), projname.c_str(), email, passw, errmsg); //подключить проект
+			success = srv->projectattach(projurl.c_str(), projname.c_str(), email, passw, errmsg); // Connect to project
 		    if (success)
-			putevent(new TuiEvent(evADDPROJECT)); //создаем событие чтобы закрыть форму
+			putevent(new TuiEvent(evADDPROJECT)); // Create an event to close the form
 		    else
 		    {
-			//СООБЩЕНИЕ ОБ ОШИБКЕ
+			// Error message
 			errmsg = " Error: " + errmsg;
 			set_field_buffer(fields[errmsgfield], 0, errmsg.c_str());
-			field_opts_on(fields[errmsgfield], O_VISIBLE); //делаем видимой строку ошибки
+			field_opts_on(fields[errmsgfield], O_VISIBLE); // Make error line visible
 			this->refresh();
 		    }
 		}
 		break;
 	    }
 	    case 27:
-		putevent(new TuiEvent(evADDPROJECT)); //код закрытия окна
+		putevent(new TuiEvent(evADDPROJECT)); // Window closing code
 		break;
 	    default:
 		kLogPrintf("AddProjectForm::KEYCODE=%d\n", ev->keycode);

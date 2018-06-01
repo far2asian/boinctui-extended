@@ -40,7 +40,7 @@ std::string raw2hr (Item* item)
 	    case 9: result  << "suspended"; break;
 	    case 5: result  << "abort pending"; break;
 	    case 8: result  << "quit pending"; break;
-	    case 10: result << "copy panding"; break;
+	    case 10: result << "copy pending"; break;
 	}//switch
     }
 

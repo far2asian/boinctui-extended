@@ -22,7 +22,7 @@
 #include "tuievent.h"
 
 
-char* strlowcase(char* s); //в нижний регистр
+char* strlowcase(char* s); // To lower case
 
 
 AddAccMgrForm::AddAccMgrForm(int rows, int cols,  Srv* srv, const char* mgrname) : NForm(rows,cols)
@@ -33,16 +33,16 @@ AddAccMgrForm::AddAccMgrForm(int rows, int cols,  Srv* srv, const char* mgrname)
     Item* account_manager = NULL;
     if (srv !=NULL)
 	account_manager = srv->findaccountmanager(mgrname);
-    //поля
+    // Margins
     int row = 0;
     genfields(row,account_manager);
-    //пересчитываем высоту формы, чтобы влезли все поля и центрируем
+    // Recalculate the height of the form, so that all the fields look right
     int r,c =0;
     scale_form(frm, &r, &c);
     kLogPrintf("field_count=%d scale_form()->%d,%d\n", field_count(frm), r, c);
     resize(r+3,c+2);
 
-    set_current_field(frm, fields[0]); //фокус на поле
+    set_current_field(frm, fields[0]); // Set focus on first field
 
     post_form(frm);
     this->refresh();
@@ -53,14 +53,14 @@ void AddAccMgrForm::genfields(int& line, Item* mgr) //создаст масси�
 {
     FIELD* f;
     delfields();
-    //сообщение об ошибке
+    // Error message
     errmsgfield = getfieldcount();
     f = addfield(new_field(1, getwidth()-2, line++, 0, 0, 0));
-    set_field_buffer(f, 0, "Errr");
+    set_field_buffer(f, 0, "Error");
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
-    field_opts_off(f, O_VISIBLE); //по умолчанию невидима
-    //получить url и имя менеджера (или из конфига или от boinc клиента
+    field_opts_off(f, O_ACTIVE); // Static text
+    field_opts_off(f, O_VISIBLE); // Default is invisible
+    // Get the url and the name of the manager (either from the config or from the boinc client)
     if (mgr != NULL)
     {
         Item* url = mgr->findItem("url");
@@ -69,7 +69,7 @@ void AddAccMgrForm::genfields(int& line, Item* mgr) //создаст масси�
     }
     else
     {
-        //взять url из конфига (если есть)
+        // Take the url from the config (if any)
 	Item* boinctui_cfg = gCfg->getcfgptr();
 	if (boinctui_cfg != NULL)
 	{
@@ -91,22 +91,22 @@ void AddAccMgrForm::genfields(int& line, Item* mgr) //создаст масси�
 	    }
 	}
     }
-    //имя менеджера
+    // Manager name
     f = addfield(new_field(1, getwidth()-4, line, 2, 0, 0));
     set_field_buffer(f, 0, "Description  ");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
+    field_opts_off(f, O_ACTIVE); // Static text
     namefield = getfieldcount();
     f = addfield(new_field(1, 40, line++, 15, 0, 0));
     if (mgr != NULL)
     {
 	field_opts_off(f, O_STATIC);
-	field_opts_off(f, O_ACTIVE); //статический текст
+	field_opts_off(f, O_ACTIVE); // Static text
     }
     else
 	set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
     field_opts_off(f, O_AUTOSKIP);
-    set_max_field(f,128); //max width 128
+    set_max_field(f,128); // Max width 128
     char buf[129];
     strncpy(buf, gettitle(), 128);
     buf[128] = '\0';
@@ -114,64 +114,64 @@ void AddAccMgrForm::genfields(int& line, Item* mgr) //создаст масси�
     p = ltrim(buf);
     rtrim(buf);
     set_field_buffer(f, 0, p);
-    //url
+    // url
     line++;
     f = addfield(new_field(1, getwidth()-4, line, 2, 0, 0));
     set_field_buffer(f, 0, "URL          ");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
+    field_opts_off(f, O_ACTIVE); // Static text
     urlfield = getfieldcount();
     f = addfield(new_field(1, 40, line++, 15, 0, 0));
     if (mgr != NULL)
     {
 	field_opts_off(f, O_STATIC);
-	field_opts_off(f, O_ACTIVE); //статический текст
+	field_opts_off(f, O_ACTIVE); // Static text
     }
     else
 	set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
     field_opts_off(f, O_AUTOSKIP);
-    set_max_field(f,128); //max width 128
+    set_max_field(f,128); // Max width 128
     set_field_buffer(f, 0, mgrurl.c_str());
-    //help
+    // Help text
     line++;
     f = addfield(new_field(3, getwidth()-4, line++, 2, 0, 0));
     set_field_buffer(f, 0,  "If you have not yet registered with this account manager" \
     			"     please do so before proceeding.");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
+    field_opts_off(f, O_ACTIVE); // Static text
     line = line + 2;
-    //user name
+    // User name
     line++;
     f = addfield(new_field(1, 10, line, 2 , 0, 0));
     set_field_buffer(f, 0, "username");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
+    field_opts_off(f, O_ACTIVE); // Static text
     usernamefield = getfieldcount();
     f = addfield(new_field(1, 40, line++, 15, 0, 0));
     field_opts_off(f, O_AUTOSKIP);
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-    //password
+    // Password
     line++;
     f = addfield(new_field(1, 10, line, 2 , 0, 0));
     set_field_buffer(f, 0, "password");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
+    field_opts_off(f, O_ACTIVE); // Static text
     passwfield = getfieldcount();
     f = addfield(new_field(1, 40, line++, 15, 0, 0));
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
     field_opts_off(f, O_AUTOSKIP);
-    //подсказки
+    // Control keys
     line++;
     f = addfield(new_field(1, getwidth()-25, line++, 20 , 0, 0));
     set_field_buffer(f, 0, "Enter-Ok    Esc-Cancel");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); //статический текст
-    //финализация списка полей
+    field_opts_off(f, O_ACTIVE); // Static text
+    // Finalise the list of fields
     addfield(NULL);
 }
 
 
-void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событий
+void AddAccMgrForm::eventhandle(NEvent* ev) // Event handler
 {
     if ( ev->done )
 	return;
@@ -186,9 +186,9 @@ void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событи
         switch(ev->keycode)
 	{
 	    case KEY_ENTER:
-	    case '\n': //ENTER
+	    case '\n': // ENTER
 	    {
-		form_driver(frm, REQ_NEXT_FIELD); //костыль чтобы текущее поле не потеряло значение
+		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
 		char* username = rtrim(field_buffer(fields[usernamefield],0));
 		char* passw = rtrim(field_buffer(fields[passwfield],0));
 		mgrurl = rtrim(field_buffer(fields[urlfield],0));
@@ -203,10 +203,10 @@ void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событи
 			Item* account_manager = NULL;
 			if (srv !=NULL)
 			    account_manager = srv->findaccountmanager(mgrname);
-			if (account_manager == NULL) //для кастомных менеджеров сохраняем в конфигах
+			if (account_manager == NULL) // For custom managers we save in configs
 			{
-			    //проверить есть-ли уже в конфиге такой аккаунт менеджер
-			    //то обновляем существующую запись, иначе добавляем новую
+			    // Check if the account manager is already in the config
+			    // Then we either update the existing record, otherwise add a new one
 			    bool exist = false;
 			    Item* boinctui_cfg = gCfg->getcfgptr();
 			    if (boinctui_cfg != NULL)
@@ -221,7 +221,7 @@ void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событи
 					if (strcmp(namecfg->getsvalue(),mgrname) == 0)
 					{
 					    exist = true;
-					    //обновить значение url в конфиге
+					    // Update the URL value in the config
 					    Item* urlcfg = (*it)->findItem("url");
 					    if (urlcfg != NULL)
 						urlcfg->setsvalue(mgrurl.c_str());
@@ -231,7 +231,7 @@ void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событи
 					if (strcmp(urlcfg->getsvalue(),mgrurl.c_str()) == 0)
 					{
 					    exist = true;
-					    //обновить значение имени в конфиге
+					    // Update the value of the name in the config
 					    Item* namecfg = (*it)->findItem("name");
 					    if (namecfg != NULL)
 						namecfg->setsvalue(mgrname);
@@ -242,7 +242,7 @@ void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событи
 				}
 				if (!exist)
 				{
-				    //записать в конфиг как новый
+				    // Write to config as new
 				    Item* accmgr  = new Item("accmgr");
 				    boinctui_cfg->addsubitem(accmgr);
 				    Item* name  = new Item("name");
@@ -254,21 +254,21 @@ void AddAccMgrForm::eventhandle(NEvent* ev) 	//обработчик событи
 				}
 			    }
 			}
-			putevent(new TuiEvent(evADDACCMGR)); //создаем событие чтобы закрыть форму
+			putevent(new TuiEvent(evADDACCMGR)); // Create an event to close the form
 		    }
 		    else
 		    {
-			//СООБЩЕНИЕ ОБ ОШИБКЕ
+			// Error message
 			errmsg = " Error: " + errmsg;
 			set_field_buffer(fields[errmsgfield], 0, errmsg.c_str());
-			field_opts_on(fields[errmsgfield], O_VISIBLE); //делаем видимой строку ошибки
+			field_opts_on(fields[errmsgfield], O_VISIBLE); // Make error line visible
 			this->refresh();
 		    }
 		}
 		break;
 	    }
 	    case 27:
-		putevent(new TuiEvent(evADDACCMGR, srv, mgrname.c_str())); //код закрытия окна
+		putevent(new TuiEvent(evADDACCMGR, srv, mgrname.c_str())); // Window closing code
 		break;
 	    default:
 		kLogPrintf("AddAccMgrForm::KEYCODE=%d\n", ev->keycode);

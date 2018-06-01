@@ -27,9 +27,9 @@ class HelpWin : public NGroup
   public:
     HelpWin(int rows, int cols);
     ~HelpWin() { delete caption; };
-    virtual void eventhandle(NEvent* ev); 	//обработчик событий
+    virtual void eventhandle(NEvent* ev); // Event handler
   protected:
-    char* caption; //строка заголовка
+    char* caption; // Title bar
     NStaticText* text1;
 };
 

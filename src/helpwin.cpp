@@ -39,7 +39,7 @@ HelpWin::HelpWin(int rows, int cols) : NGroup(NRect(rows, cols, getmaxy(stdscr)/
     text1->appendstring(attr2,"       \"C\"           - Edit configuration\n");
     text1->appendstring(attr2,"       \"Q\"           - Quit boinctui\n");
     text1->appendstring(attr2,"       \"F9\"/\"M\"      - Toogle main menu\n");
-    text1->appendstring(attr2,"       \"PgUp\"/\"PgDn\" - Scroll Messages Window\n");
+    text1->appendstring(attr2,"       \"PgUp\"/\"PgDn\" - Scroll messages window\n");
     text1->appendstring(attr2,"\n");
     text1->appendstring(attr1,"   Task Controls:\n");
     text1->appendstring(attr2,"       \"Up\"/\"Dn\"     - Select task\n");
@@ -51,12 +51,12 @@ HelpWin::HelpWin(int rows, int cols) : NGroup(NRect(rows, cols, getmaxy(stdscr)/
 }
 
 
-void HelpWin::eventhandle(NEvent* ev) 	//обработчик событий
+void HelpWin::eventhandle(NEvent* ev) // Event handler
 {
     NGroup::eventhandle(ev); //предок
     if ( ev->done )
 	return;
-    //закрываем при любом клике независимо от координат
+    // Close window on any click regardless of coordinates
     NMouseEvent* mevent = (NMouseEvent*)ev;
     if (( ev->type == NEvent::evMOUSE ) && (mevent->cmdcode & (BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED)))
 	putevent(new TuiEvent(evKEYBIND));
@@ -70,10 +70,10 @@ void HelpWin::eventhandle(NEvent* ev) 	//обработчик событий
 	    case KEY_ENTER:
 	    case ' ':
 	    case '\n':
-		putevent(new TuiEvent(evKEYBIND)); //NEvent(NEvent::evPROG, 4)); //создаем событие с кодом 4 "окно Help"
+		putevent(new TuiEvent(evKEYBIND)); //NEvent(NEvent::evPROG, 4)); // Create event with code 4 (help window)
 		break;
 	} //switch
-	if (ev->done) //если обработали, то нужно перерисоваться
+	if (ev->done) // Redraw the screen if processing is finished
 	    refresh();
     }
 }

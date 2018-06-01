@@ -30,19 +30,19 @@ Config* gCfg;
 Config::Config(const char* filename)
 {
     root = NULL;
-    //полный путь к конфигу
+    // Full path to config
     if (filename == NULL)
 	fullname = NULL;
     else
     {
-	//хоум каталог
+	// Home directory
 	const char* homepath = getenv("HOME");
-	//полный путь
+	// Full path
 	fullname = (char*)malloc(strlen(homepath)+strlen(filename)+2);
 	sprintf(fullname,"%s/%s",homepath,filename);
 	kLogPrintf("FULLCFGPATH=%s\n",fullname); fflush(stdout);
     }
-    //загружаем если файл уже есть или генерируем дефолтный
+    // If file exists, load it. If not, create a new one
     load();
     asciilinedraw = getivalue("line_draw_mode");
 }
@@ -69,13 +69,13 @@ void Config::load()
 
     struct stat st;
     int retcode = lstat(fullname, &st);
-    if (retcode != 0) //файла нет?
+    if (retcode != 0) // No file?
     {
-	    //делаем дефолтный
+	    // Make the default config
 	    generatedefault();
 	    return;
     }
-    //читаем файл
+    // Read the file
     FILE* pfile;
     pfile = fopen(fullname,"r");
     if (pfile!=NULL)
@@ -97,7 +97,7 @@ void Config::load()
 void Config::save()
 {
     if (!errmsg.empty())
-        return; //если была ошибка при загрузке то файл не перезаписываем
+        return; // If there was an error while loading that file is not overwritten
     if (fullname == NULL)
 	return;
     if (root == NULL)
@@ -120,7 +120,7 @@ void Config::save()
 void Config::addhost(const char* shost, const char* sport, const char* spwd)
 {
     if ( (strlen(shost) == 0)||(strlen(sport) == 0) )
-	return; //пустые не заносим
+	return; // If fields are empty, do nothing
 
     Item* boinctui_cfg = getcfgptr();
     if (boinctui_cfg == NULL)
@@ -176,7 +176,7 @@ void Config::setivalue(Item* node, const char* name, int value) //создаст
     if (basenode == NULL)
 	basenode = root; //если узел не указан используем корневой
     if (basenode == NULL)
-	return; //ничего не делаем
+	return; // Do nothing
     Item* item = basenode->findItem(name);
     //эл-та нет - нужно создать
     if (item == NULL)
@@ -184,6 +184,6 @@ void Config::setivalue(Item* node, const char* name, int value) //создаст
 	item = new Item(name);
 	basenode->addsubitem(item);
     }
-    //устнавливаем значение
+    // Set the value
     item->setivalue(value);
 }

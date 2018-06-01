@@ -33,14 +33,14 @@ class Config
     Item* getcfgptr() { if ( root!= NULL) return root->findItem("boinctui_cfg"); else return NULL; };
     int   getivalue(Item* node, const char* name); //ищет name начиная с node
     int   getivalue(const char* name) { return getivalue(getcfgptr(), name); }; //ищет name начиная с корня
-    void  setivalue(Item* node, const char* name, int value); //создаст в node подэл-т name со значением value
-    void  setivalue(const char* name, int value) { setivalue(getcfgptr(), name, value); }; //создаст в корне подэл-т name со значением value
+    void  setivalue(Item* node, const char* name, int value); // Will create a sub-name in the node with value
+    void  setivalue(const char* name, int value) { setivalue(getcfgptr(), name, value); }; // Will create a sub-name in the node with value
     void  addhost(const char* host, const char* port, const char* pwd);
-    bool  isdefault; //true если конфиг не найден и создан дефолтный
-    std::string errmsg; //строка ошибки возникшей при загрузке файла конфига
+    bool  isdefault; // True if the config is not found and the default was created
+    std::string errmsg; // Error message received when downloading the config file
   protected:
-    char* fullname;	//полное имя файла
-    Item* root;  	//корень дерева конфига
+    char* fullname;	// Full filename
+    Item* root;  	// Config tree root
 };
 
 

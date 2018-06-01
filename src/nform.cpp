@@ -68,7 +68,9 @@ void NForm::settitle(const char* title)
 
 FIELD* NForm::addfield(FIELD* field)
 {
-    fields = (FIELD**)realloc(fields, (fieldcount+1)*sizeof(FIELD*)); //выделяем память под массив полей
+    FIELD** tmp = (FIELD**)realloc(fields, (fieldcount+1)*sizeof(FIELD*)); //выделяем память под массив полей
+    if (tmp != NULL)
+        fields = tmp;
     fields[fieldcount] = field;
     fieldcount++;
     if (field == NULL)

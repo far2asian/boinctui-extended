@@ -23,18 +23,18 @@
 #include "srvdata.h"
 
 
-struct ProjectStat //статистика по проекту
+struct ProjectStat // Project statistics
 {
-    std::string		name;		//имя проекта
-    std::string		sstatus;	//строка состояния проекта
-    double		user;		//очки по проекту (всего для юзера)
-    double		host;		//очки по проекту (всего для хоста)
-    time_t		laststattime;	//дата последней статистики
-    double 		userlastday; 	//очки юзера за последний день по каждому проекту
-    double 		hostlastday;	//очки хоста за последний день по каждому проекту
+    std::string		name;		// Project name
+    std::string		sstatus;	// Project status bar
+    double		user;		// Total project score for user
+    double		host;		// Total project score for host
+    time_t		laststattime;	// Last statistics date/time
+    double 		userlastday; 	// Last day's project score for the user
+    double 		hostlastday;	// Last day's project score for the host
     static bool CmpAbove( ProjectStat stat1, ProjectStat stat2 ) //для сортировки проектов true если дата stat1 > stat2
     {
-	//суммарная для юзера и хоста
+	// Total for user and host
 	double score1 = stat1.userlastday + stat1.hostlastday;
 	double score2 = stat2.userlastday + stat2.hostlastday;
 	if (stat1.laststattime == stat2.laststattime)
@@ -68,32 +68,32 @@ class InfoPanel : public NView
     void updatedata();
     virtual void refresh();
     void	setserver(Srv* srv) { this->srv = srv; };
-    virtual void eventhandle(NEvent* ev); 	//обработчик событий
+    virtual void eventhandle(NEvent* ev); // Event handler
   protected:
     Srv*	srv;
-    std::string getdayname(time_t ltime); //название дня "today" "yesterday" ""
-    //---для процессов---
+    std::string getdayname(time_t ltime); // Name of the day (i.e. "today", "yesterday"...)
+    // ---For processes---
     int nalltasks;
     int nactivetasks;
     int nruntasks;
     int nqueuetasks;
     int ndonetasks;
     int nothertasks;
-    //---для дисков---
+    // ---For disk space---
     double dtotal;
     double dfree;
     double dboinc;
     double dallowed;
-    //---статистика cуммарная---
+    // ---Statistics summary---
     double usertotal;
     double useravg;
     double hosttotal;
     double hostavg;
-    //---статистика за сегодня---
-    time_t laststattime; //дата последней статистики
+    // ---Statistics for today---
+    time_t laststattime; // Last statistics date/time
     double lastdayuser;
     double lastdayhost;
-    std::vector<ProjectStat> projects; //статистика по отдельным проектам
+    std::vector<ProjectStat> projects; // Statistics for individual projects
 };
 
 #endif //INFOPANEL_H

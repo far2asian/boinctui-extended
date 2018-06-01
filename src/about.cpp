@@ -43,12 +43,12 @@ AboutWin::AboutWin(int rows, int cols) : NGroup(NRect(rows, cols, getmaxy(stdscr
 }
 
 
-void AboutWin::eventhandle(NEvent* ev) 	//обработчик событий
+void AboutWin::eventhandle(NEvent* ev) // event handler
 {
     NGroup::eventhandle(ev); //предок
     if ( ev->done )
 	return;
-    //закрываем при любом клике независимо от координат
+    // Close the window on any click, regardless of coordinates
     NMouseEvent* mevent = (NMouseEvent*)ev;
     if (( ev->type == NEvent::evMOUSE ) && (mevent->cmdcode & (BUTTON1_CLICKED | BUTTON1_DOUBLE_CLICKED)))
 	putevent(new TuiEvent(evABOUT));
@@ -62,10 +62,10 @@ void AboutWin::eventhandle(NEvent* ev) 	//обработчик событий
 	    case KEY_ENTER:
 	    case ' ':
 	    case '\n':
-		putevent(new TuiEvent(evABOUT)); //NEvent(NEvent::evPROG, 3)); //создаем событие с кодом 3 "окно About"
+		putevent(new TuiEvent(evABOUT)); //NEvent(NEvent::evPROG, 3)); // create event with code 3 "About window"
 		break;
 	} //switch
-	if (ev->done) //если обработали, то нужно перерисоваться
+	if (ev->done) // Redraw the screen if needed
 	    refresh();
     }
 }

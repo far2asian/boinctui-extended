@@ -26,9 +26,9 @@ class AboutWin : public NGroup
   public:
     AboutWin(int rows, int cols);
     ~AboutWin() { delete caption; };
-    virtual void eventhandle(NEvent* ev); 	//обработчик событий
+    virtual void eventhandle(NEvent* ev); // Event handler
   protected:
-    char* caption; //строка заголовка
+    char* caption; // Title bar
 };
 
 #endif //ABOUT_H

@@ -92,7 +92,9 @@ void NMenu::destroysubmenu() //закрыть субменю
 void NMenu::additem(const char* name, const char* comment) //добавить эл-т в меню
 {
     unpostmenu();
-    mitems = (ITEM**)realloc(mitems,(itemnames.size()+1)*sizeof(ITEM*));
+    ITEM** tmp = (ITEM**)realloc(mitems,(itemnames.size()+1)*sizeof(ITEM*));
+    if (tmp != NULL)
+        mitems = tmp;
     if (name == NULL) //финализация списка
     {
 	mitems[itemnames.size()] = NULL;

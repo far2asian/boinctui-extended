@@ -29,8 +29,8 @@ class AddAccMgrForm : public NForm
 {
   public:
     AddAccMgrForm(int lines, int rows, Srv* srv, const char* mgrname);
-    void genfields(int& line, Item* mgr); //создаст массив полей
-    virtual void eventhandle(NEvent* ev);	//обработчик событий
+    void genfields(int& line, Item* mgr); // Create an array of fields
+    virtual void eventhandle(NEvent* ev);	// Event handler
   protected:
     int		namefield;
     int		passwfield;
@@ -38,8 +38,8 @@ class AddAccMgrForm : public NForm
     int		usernamefield;
     int		urlfield;
     Srv*	srv;
-    std::string mgrname;	//имя акк менеджера
-    std::string mgrurl;		//url подключаемого менеджера
+    std::string mgrname; // Manager name
+    std::string mgrurl;	// Manager URL
 };
 
 

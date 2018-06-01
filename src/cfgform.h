@@ -29,12 +29,12 @@ class CfgForm : public NForm
 {
   public:
     CfgForm(int lines, int rows/*, Config* cfg*/);
-    void genfields(bool extfields); //создаст массив полей (extfields если нужно добавить хост)
-    virtual void eventhandle(NEvent* ev); 	//обработчик событий
+    void genfields(bool extfields); // Create an array of fields (extfields if you need to add a host)
+    virtual void eventhandle(NEvent* ev); // Event handler
   protected:
-    void	updatecfg(); //сохраняет данные из формы в cfg
+    void	updatecfg(); // Saves data from form to config
     //Config* 	cfg;
-    bool	extfields; //true если поле для доп хоста видимо
+    bool	extfields; // True if the field for the additional host is visible
     int		nhost; //макс номер хоста с 0го (включаа дополнительный если есть)
 };
 

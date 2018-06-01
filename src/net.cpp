@@ -122,7 +122,9 @@ char* TConnect::waitresult() //получить ответ от сервера (
 	//printf("allbytes= %d received %d bytes\n",totalBytesRcvd,bytesRcvd);
 	//копируем в суммарный буфер
 	answbuflen = answbuflen+bytesRcvd;
-	answbuf = (char*)realloc(answbuf,answbuflen);
+	char* tmp = (char*)realloc(answbuf,answbuflen);
+	if (tmp != NULL)
+	    answbuf = tmp;
 	memcpy(&answbuf[totalBytesRcvd], bufpart, bytesRcvd);
         totalBytesRcvd += bytesRcvd;
         if (answbuf[totalBytesRcvd-1] == '\003')
