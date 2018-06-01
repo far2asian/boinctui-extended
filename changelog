@@ -1,3 +1,19 @@
+boinctui (haven't decided on a version yet)
+
+  * added "M" as a menu hot key (by zeekec)
+
+  * added greater precision to time display (by zeekec)
+
+  * converted code comments to English (WIP)
+
+  * added documentation
+
+  * added changes to build enironment files (by zeekec)
+
+  * added transparent backgrounds (by DerVerruckteFuchs)
+
+  * general code improvements and bug fixes including running through cppcheck (by various people)
+
 boinctui (2.5.0)
 
   * implemented Statistics window
