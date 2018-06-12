@@ -38,7 +38,7 @@ HelpWin::HelpWin(int rows, int cols) : NGroup(NRect(rows, cols, getmaxy(stdscr)/
     text1->appendstring(attr2,"       \"N\"           - Toogle between BOINC hosts\n");
     text1->appendstring(attr2,"       \"C\"           - Edit configuration\n");
     text1->appendstring(attr2,"       \"Q\"           - Quit boinctui\n");
-    text1->appendstring(attr2,"       \"F9\"/\"M\"      - Toogle main menu\n");
+    text1->appendstring(attr2,"       \"F9\"/\"M\"      - Toggle main menu\n");
     text1->appendstring(attr2,"       \"PgUp\"/\"PgDn\" - Scroll messages window\n");
     text1->appendstring(attr2,"\n");
     text1->appendstring(attr1,"   Task Controls:\n");
@@ -46,7 +46,7 @@ HelpWin::HelpWin(int rows, int cols) : NGroup(NRect(rows, cols, getmaxy(stdscr)/
     text1->appendstring(attr2,"       \"S\"           - Suspend selected running task\n");
     text1->appendstring(attr2,"       \"R\"           - Resume selected suspended task\n");
     text1->appendstring(attr2,"       \"A\"           - Abort selected task\n");
-    text1->appendstring(attr2,"       \"Enter\"       - View selected task raw info\n");
+    text1->appendstring(attr2,"       \"Enter\"       - View selected task's raw info\n");
     insert(text1);
 }
 

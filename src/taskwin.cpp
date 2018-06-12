@@ -250,7 +250,7 @@ std::string gethumanreadabletimestr(time_t time) //получить в виде 
                 }
             }
         }
-    }        
+    }
     /*
     tm* t = gmtime(&time);
     if ( t->tm_yday > 0 )

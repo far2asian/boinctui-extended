@@ -1,10 +1,14 @@
-boinctui (haven't decided on a version yet)
+boinctui-extended (v1.0.0)
+
+  * project renamed (seems to be the polite way)
 
   * added "M" as a menu hot key (by zeekec)
 
   * added greater precision to time display (by zeekec)
 
-  * converted code comments to English (WIP)
+  * converted code comments to English (WIP - 1/3ish done)
+
+  * fixed some UI typos and changed some strings
 
   * added documentation
 

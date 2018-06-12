@@ -122,7 +122,7 @@ void MainWin::saveopttoconfig() //сохранить высоту списка �
 }
 
 
-void 	MainWin::setserver(Srv* srv) //установить отображаемый сервер
+void MainWin::setserver(Srv* srv) //установить отображаемый сервер
 {
     this->srv = srv;
     wmsg->setserver(srv);
@@ -172,7 +172,7 @@ void MainWin::updatecaption()
     caption->clear();
     if (srv)
     {
-        caption->append(getcolorpair(COLOR_WHITE,-1) | A_BOLD," Host %s:%s ",srv->gethost(),srv->getport());
+        caption->append(getcolorpair(COLOR_WHITE,-1) | A_BOLD," Host %s:%s",srv->gethost(),srv->getport());
         if (srv->loginfail)
             caption->append(getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD,"unauthorized!");
         else

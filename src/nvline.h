@@ -30,8 +30,8 @@ class NVLine : public NView
     void setbgcolor(int colorpair) { bgcolor = colorpair; };
     virtual void refresh();
   protected:
-    int		bgcolor; //цвет фона
-    const char*	mbsym; //символ
+    int		bgcolor; // Background colour
+    const char*	mbsym; // Symbol
 };
 
 #endif //NVLINE_H

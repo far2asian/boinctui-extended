@@ -26,7 +26,7 @@
 //#include "kclog.h"
 
 
-class NEvent //класс описывающий событие создаваемое например при нажатии клавиш
+class NEvent // Class for events such as keypresses etc.
 {
   public:
     enum	Type		{ evKB, evMOUSE, evPROG, evTIMER }; //evPROG событие генерируемое самой прораммой

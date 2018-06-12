@@ -452,7 +452,6 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
     }
 }
 
-
 bool MainProg::mainloop() //основной цикл порождающий события
 {
     sigset_t newset;

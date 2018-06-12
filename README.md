@@ -1,4 +1,4 @@
-# boinctui
+# boinctui-extended
 Original code by Sergey Suslov (suleman1971@gmail.com)  
 Improved build by Mark Pentler (https://github.com/mpentler/)  
 
@@ -18,6 +18,7 @@ Additionally other changes from around GitHub have been merged into this fork:
 - Added another hot key to bring up the menu in case of double-assignment
 - Increased precision of time displays
 - Code comments are being translated into English to assist in working with the codebase
+- Typos and some UI strings corrected
 - & other code improvements (cppcheck and build environment stuff)
 
 ## Compiling
@@ -53,12 +54,12 @@ After starting the application you can do a few things:
 
 All of these options are in the menus (M key or F9) and are self-explanatory.
 
-## Hot key operation
+## Useful hot keys
 - M/F9 - Open menus
 - N - Show next host in the list
 - C - Configure host list
 - V - View statistics
-- Arrow keys - Navigate task list and menus
+- Arrow keys - Navigate task list and menus (mouse also supported!)
 - S - Suspend selected task
 - R - Resume (or queue) selected task
 - A - Abort selected task (requires confirmation)
@@ -66,8 +67,7 @@ All of these options are in the menus (M key or F9) and are self-explanatory.
 - Q - Quit boinctui (hit Escape to close windows first)
 
 ## Issues
-Nothing specific, but I've had a few segmentation faults with the original codebase 
-so it needs a good pruning by someone who actually knows C++ - maybe that's you!?
+Nothing specific, but I've had a few segmentation faults with the original codebase so it needs a good pruning by someone who actually knows C++ - maybe that's you!?
 
 ## Acknowledgments
 Additions to the original codebase are from the following GitHub users:

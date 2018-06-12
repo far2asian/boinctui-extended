@@ -24,36 +24,36 @@
 
 enum TuiEventType
 {
-    evCFGCH,		//конфигурация изменена
-    evABORTRES,		//abort selected result
-    evABOUT,		//открыть/закрыть откно About
-    evKEYBIND,		//открыть/закрыть откно Key Bindings
-    evBENCHMARK,	//run benchmark
-    evADDPROJECT,	//форма добавить проект
-    evCOLVIEWCH,	//переключение видимости колонки
-    evVIEWMODECH,	//переключение режима видимости All/Hide done/Active tasks only
-    evSORTMODECH,	//переключение режима сортировки списка задач 0-unsorted 1-state e.t.c.
-    evADDACCMGR,	//форма акк менеджера
-    evPROJECTOP,	//операции над проектом
+    evCFGCH,		// Configuration changed
+    evABORTRES,		// Abort selected result
+    evABOUT,		// Open About window
+    evKEYBIND,		// Open Key Bindings window
+    evBENCHMARK,	// Run benchmark
+    evADDPROJECT,	// Add project
+    evCOLVIEWCH,	// Switch the column visibility
+    evVIEWMODECH,	// Switch visibility mode - All/Hide done/Active tasks only
+    evSORTMODECH,	// Switch view mode - 0-unsorted 1-state e.t.c.
+    evADDACCMGR,	// Add account manager form
+    evPROJECTOP,	// Project operations
     evTASKINFO,		//генерируется когда нужно открыть окно детальной информации о задаче
-    evTASKSELECTORON,	//генерируется когда селектор задач становится видимым
-    evTASKSELECTOROFF,	//генерируется когда селектор задач становится скрытым
-    evASCIIMODECHANGE,	//генерируется при переключении режима ASCII рамок
-    evPOPUPMSG          //генерируется когда нужно открыть попап сообщение
+    evTASKSELECTORON,	// Triggers when the task becomes visible
+    evTASKSELECTOROFF,	// Triggers when the task selector becomes hidden
+    evASCIIMODECHANGE,	// Triggers when ASCII line mode is changed
+    evPOPUPMSG          // Triggers when a popup window is opened
 };
 
 
-class TuiEvent : public NEvent //класс программных событий специфичных для boinctui
+class TuiEvent : public NEvent // boinctui-specific programming events class
 {
   public:
     TuiEvent(TuiEventType type) : NEvent(evPROG, type)	{};
-    TuiEvent(TuiEventType type, Srv* srv, const char* prjname, bool userexist) : NEvent(evPROG, type) //событие для добавления проекта
+    TuiEvent(TuiEventType type, Srv* srv, const char* prjname, bool userexist) : NEvent(evPROG, type) // Add project event
     {
 	this->srv = srv;
 	this->sdata1 = prjname;
 	this->bdata1 = userexist;
     };
-    TuiEvent(TuiEventType type, Srv* srv, const char* mgrname) : NEvent(evPROG, type) //событие для подключения к менеджеру
+    TuiEvent(TuiEventType type, Srv* srv, const char* mgrname) : NEvent(evPROG, type) // Connect to account manager
     {
 	this->srv = srv;
 	this->sdata1 = mgrname;
@@ -63,7 +63,7 @@ class TuiEvent : public NEvent //класс программных событи�
 	this->srv = srv;
 	this->sdata1 = projname;
 	this->sdata2 = projop;
-	this->bdata1 = false; //true - если получено подтверждение
+	this->bdata1 = false; //true - if a confirmation is received
     };
 
     TuiEvent(TuiEventType type ,int ncolumn, bool enable) : NEvent(evPROG, type) //событие переключения видимости колонки
@@ -75,7 +75,7 @@ class TuiEvent : public NEvent //класс программных событи�
     {
 	this->idata1 = mode;
     };
-    TuiEvent(TuiEventType type, const char* caption, const char* msg) : NEvent(evPROG, type) //событие попап сообщения
+    TuiEvent(TuiEventType type, const char* caption, const char* msg) : NEvent(evPROG, type) // Popup message event
     {
         this->sdata1 = caption;
         this->sdata2 = msg;

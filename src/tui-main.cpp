@@ -36,12 +36,12 @@ void initcurses()
     initscr();
     noecho();
     curs_set(0);
-    keypad(stdscr,true); //разрешаем стрелки и т.п.
+    keypad(stdscr,true); // Enable the keypad
     #ifdef ENABLEMOUSE
     mousemask(ALL_MOUSE_EVENTS, NULL); // Report all mouse events
     #endif
-    timeout(100); //ожидание для getch() 100 милисекунд
-    use_default_colors(); // enable use of default colors for transparency
+    timeout(100); // Wait for getch() 100 milliseconds
+    use_default_colors(); // Enable use of default colors for transparency
     start_color();
 }
 
@@ -65,7 +65,7 @@ int main(int argc, char ** argv)
     #endif
     mainprog = new MainProg();
     mainprog->refresh();
-    mainprog->mainloop(); //запускаем осн. цикл событий
+    mainprog->mainloop(); // Run the main event loop
     delete mainprog;
     #ifdef DEBUG
     struct mallinfo minf2 = mallinfo();
