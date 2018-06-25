@@ -156,15 +156,27 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 	    case 'n':
 	    case 'N':
 		menu->disable();
-        if (gsrvlist->getcursrv())
-        {
-		gsrvlist->nextserver();
-		wmain->setserver(gsrvlist->getcursrv());
-		menu->setserver(gsrvlist->getcursrv());
-		evtimertime = 0; //для перезапуска таймера для форсированонй перерисовки
-		wmain->updatecaption();
-        }
+                if (gsrvlist->getcursrv())
+                {
+		    gsrvlist->nextserver();
+		    wmain->setserver(gsrvlist->getcursrv());
+		    menu->setserver(gsrvlist->getcursrv());
+		    evtimertime = 0; //для перезапуска таймера для форсированонй перерисовки
+		    wmain->updatecaption();
+                }
 		break;
+            case 'p':
+            case 'P':
+                menu->disable();
+                if (gsrvlist->getcursrv())
+                {
+                    gsrvlist->prevserver();
+                    wmain->setserver(gsrvlist->getcursrv());
+                    menu->setserver(gsrvlist->getcursrv());
+                    evtimertime = 0;
+                    wmain->updatecaption();
+                }
+                break;
 	    case 'c':
 	    case 'C':
 		if (getitembyid(typeid(CfgForm).name()) == NULL)

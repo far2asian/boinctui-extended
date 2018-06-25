@@ -22,7 +22,7 @@
 #include "resultparse.h"
 
 
-void MsgWin::updatedata() //обновить данные с сервера
+void MsgWin::updatedata() // Updatr data from the host
 {
     if (srv == NULL)
 	return;
@@ -99,7 +99,7 @@ void MsgWin::updatedata() //обновить данные с сервера
 }
 
 
-void MsgWin::eventhandle(NEvent* ev) 	//обработчик событий
+void MsgWin::eventhandle(NEvent* ev) // Event handler
 {
     NScrollView::eventhandle(ev); //предок
     if ( ev->done )

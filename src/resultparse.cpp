@@ -35,7 +35,7 @@ char* stripinvalidtag(char* xml, int len) 	//ГРЯЗНЫЙ ХАК нужен ч
 {
     const char* teg1 = "<body>";
     const char* teg2 = "</body>";
-    int bytesdone = 0; //просмотрено байт
+    int bytesdone = 0; // Bytes viewed
     char* pos = (char*)xml;
     while (pos < xml + len)
     {
@@ -45,10 +45,10 @@ char* stripinvalidtag(char* xml, int len) 	//ГРЯЗНЫЙ ХАК нужен ч
 	{
 	    for(char* p = x1 + strlen(teg1); p < x2; p++)
 	    {
-		if ((*p == '<')||(*p == '>')) //убираем html теги
+		if ((*p == '<')||(*p == '>')) // Remove HTML tags
 		    *p = ' ';
 	    }
-	    pos = (x1>x2)? x1:x2; //берем наибольшую
+	    pos = (x1>x2)? x1:x2; // Pick the largest
 	    pos++;
 	}
 	else

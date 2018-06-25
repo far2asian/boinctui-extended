@@ -38,7 +38,7 @@ all: createobj $(OBJS)
 	$(CPP) -o $(PACKAGE_TARNAME) $(OBJS) $(LDFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/%.cpp
-	@echo " "
+	@echo "\nCompiling...\n"
 	$(CPP) -c $(CXXFLAGS) $(CPPFLAGS) $(DEFS) -o $(ODIR)/$*.o $<
 
 clean:

@@ -2,15 +2,17 @@ boinctui-extended (v1.0.0)
 
   * project renamed (seems to be the polite way)
 
+  * added "P" to switch to the previous server in the list (me)
+
   * added "M" as a menu hot key (by zeekec)
 
   * added greater precision to time display (by zeekec)
 
   * converted code comments to English (WIP - 1/3ish done)
 
-  * fixed some UI typos and changed some strings
+  * fixed some UI typos and changed some strings (me)
 
-  * added documentation
+  * added documentation (me)
 
   * added changes to build enironment files (by zeekec)
 
