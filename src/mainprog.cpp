@@ -90,7 +90,7 @@ void MainProg::updatestatuslinecontent()
 	wstatus->appendstring(attrWG, " |");
 	wstatus->appendstring(attrYG, " PgUp/PgDn");
 	wstatus->appendstring(attrWG, " V.Scroll");
-	wstatus->appendstring(attrWG, " |");
+ 	wstatus->appendstring(attrWG, " |");
 	wstatus->appendstring(attrYG, " Left/Right");
 	wstatus->appendstring(attrWG, " H.Scroll");
 	wstatus->appendstring(attrWG, " |");
@@ -107,7 +107,12 @@ void MainProg::updatestatuslinecontent()
     }
     if ( (uistate == 0)||(uistate == stUISELECTOR) )
     {
-	wstatus->setstring(attrYG, " PgUp/PgDn");
+	char nhosts[4];
+	snprintf(nhosts, 4, "%d", gsrvlist->counthosts());
+	wstatus->setstring(attrWG, " Hosts: ");
+        wstatus->appendstring(attrWG, nhosts);
+	wstatus->appendstring(attrWG, " | ");
+	wstatus->appendstring(attrYG, "PgUp/PgDn");
 	wstatus->appendstring(attrWG, " Scroll Msg |");
 	wstatus->appendstring(attrYG, " +/-");
 	wstatus->appendstring(attrWG, " Resize Msg |");

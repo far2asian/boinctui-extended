@@ -48,7 +48,7 @@ PtrList::~PtrList()
 	delete list.front();
 	list.erase(list.begin());
     }
-    pthread_mutex_destroy(&mutex); 
+    pthread_mutex_destroy(&mutex);
 }
 
 
@@ -199,6 +199,11 @@ void SrvList::prevserver()
     else
         cursrv--;
     (*cursrv)->setactive(true);
+}
+
+int SrvList::counthosts()
+{
+    return servers.size();
 }
 
 //=============================================================================================

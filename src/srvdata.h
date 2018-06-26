@@ -128,6 +128,7 @@ class SrvList //список всех серверов
     void clear(); //удалить все соединения
     void nextserver(); //переключиться на след сервер в списке
     void prevserver();
+    int counthosts();
   protected:
     void addserver(Srv* c) { servers.push_back(c); };
     std::list<Srv*> servers; //список соединений

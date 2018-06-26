@@ -20,7 +20,7 @@ Additionally other changes from around GitHub have been merged into this fork:
 - Increased precision of time displays
 - Code comments are being translated into English to assist in working with the codebase
 - Typos and some UI strings corrected
-- & other code improvements (addressed some cppcheck and warnings & some build environment stuff)
+- & other code improvements (addressed some cppcheck warnings & some build environment stuff)
 
 ## Compiling
 Dead easy, but you'll need to install a few libraries first. Here's some instructions 
