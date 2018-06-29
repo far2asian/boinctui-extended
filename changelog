@@ -1,3 +1,7 @@
+boinctui-extended (v1.0.2)
+
+  * added a new feature! Hosts can now have an optional name saved with them too.
+
 boinctui-extended (v1.0.1)
 
   * added a host counter to the status bar - useful?

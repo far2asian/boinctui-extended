@@ -13,7 +13,9 @@ boinctui-extended is an curses-based terminal BOINC client manager for Linux. Fe
 - Toggle activity state (Always suspend/Always resume/Run based on preferences)
 - Manage BOINC client on remote hosts via boinc_gui RPC protocol
 
-Additionally other changes from around GitHub have been merged into this fork:
+Additionally other changes by me and from around GitHub have been merged into this fork:
+- Added an optional ID name field for each host - never lose track again!
+- Added a host counter
 - Transparent backgrounds supported
 - Added a hot key to go backwards in the server list
 - Added another hot key to bring up the menu in case of double-assignment

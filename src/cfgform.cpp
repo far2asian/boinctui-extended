@@ -48,16 +48,16 @@ void CfgForm::genfields(bool extfields) // Create an array of fields (extfields 
     int i  = 0; // Host number
     int nl = 2; // Screen line number
     // Static field header for hosts
-    FIELD* field   = addfield(new_field(1, 44, nl, 5, 0, 0));
+    FIELD* field   = addfield(new_field(1, 53, nl, 5, 0, 0));
     field_opts_off(field, O_ACTIVE); // Static text
-    set_field_buffer(field, 0, "host             port   pwd");
+    set_field_buffer(field, 0, "host             port   pwd                   host id");
     set_field_back(field, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
     nl = nl + 1;
     // Fields for hosts
     for (i = 0; i < nhost; i++) // Loop through hosts
     {
 	// Host field
-	field = addfield(new_field(1, 15, nl,   5, 0, 0));
+	field = addfield(new_field(1, 15, nl, 5, 0, 0));
 	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
 	field_opts_off(field, O_AUTOSKIP);
 	field_opts_off(field, O_STATIC);
@@ -72,7 +72,7 @@ void CfgForm::genfields(bool extfields) // Create an array of fields (extfields 
 	if (i == 0)
 	    set_current_field(frm, field); // Set field focus
 	// Port field
-	field = addfield(new_field(1, 5, nl, 17+5, 0, 0));
+	field = addfield(new_field(1, 5, nl, 22, 0, 0));
 	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
 	set_field_type(field, TYPE_INTEGER, 0, 0, 65535);
         field_opts_off(field, O_AUTOSKIP);
@@ -93,6 +93,18 @@ void CfgForm::genfields(bool extfields) // Create an array of fields (extfields 
 	    Item* pwd = slist[i]->findItem("pwd");
 	    if (pwd != NULL)
 		set_field_buffer(field, 0, pwd->getsvalue());
+	}
+	// hostid field
+	field = addfield(new_field(1, 20, nl, 51, 0, 0));
+	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+	field_opts_off(field, O_AUTOSKIP);
+	field_opts_off(field, O_STATIC);
+	set_max_field(field,128);
+	if (i < slist.size())
+	{
+	    Item* hostid = slist[i]->findItem("hostid");
+	    if (hostid != NULL)
+		set_field_buffer(field, 0, hostid->getsvalue());
 	}
 	nl = nl + 2;
     }
@@ -182,11 +194,12 @@ void	CfgForm::updatecfg() // Saves data from form to config
     //int n = field_count(frm);
     for (int i = 0; i < nhost; i++) // Cycle through hosts from form
     {
-	int nf = 1 + i*3; // Hostname field number
+	int nf = 1 + i*4; // Hostname field number
 	char* shost = rtrim(field_buffer(fields[nf],0));
 	char* sport = rtrim(field_buffer(fields[nf+1],0));
 	char* spwd  = rtrim(field_buffer(fields[nf+2],0));
-	kLogPrintf("SERVER %d [%s:%s <%s>]\n", i, shost, sport, spwd);
-	gCfg->addhost(shost, sport, spwd);
+	char* shostid = rtrim(field_buffer(fields[nf+3],0));
+	kLogPrintf("SERVER %d [%s:%s <%s> ID: %s]\n", i, shost, sport, spwd, shostid);
+	gCfg->addhost(shost, sport, spwd, shostid);
     }
 }

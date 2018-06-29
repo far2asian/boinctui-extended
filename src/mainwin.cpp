@@ -172,7 +172,7 @@ void MainWin::updatecaption()
     caption->clear();
     if (srv)
     {
-        caption->append(getcolorpair(COLOR_WHITE,-1) | A_BOLD," Host %s:%s",srv->gethost(),srv->getport());
+        caption->append(getcolorpair(COLOR_WHITE,-1) | A_BOLD," Host %s:%s ID: %s ",srv->gethost(),srv->getport(),srv->hostid);
         if (srv->loginfail)
             caption->append(getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD,"unauthorized!");
         else

@@ -148,12 +148,17 @@ void SrvList::refreshcfg() //перечитать из конфига
 	Item* host = (*it)->findItem("host");
 	Item* port = (*it)->findItem("port");
 	Item* pwd = (*it)->findItem("pwd");
+	Item* hostid = (*it)->findItem("hostid");
 	if ((host != NULL)&&(port != NULL))
 	{
-	    if (pwd == NULL)
-		servers.push_back(new Srv(host->getsvalue(), port->getsvalue(), ""));
+	    if ((pwd == NULL) && (hostid == NULL))
+		servers.push_back(new Srv(host->getsvalue(), port->getsvalue(), "", ""));
+	    else if (hostid == NULL)
+		servers.push_back(new Srv(host->getsvalue(), port->getsvalue(), pwd->getsvalue(), ""));
+	    else if (pwd == NULL)
+		servers.push_back(new Srv(host->getsvalue(), port->getsvalue(), "", hostid->getsvalue()));
 	    else
-		servers.push_back(new Srv(host->getsvalue(), port->getsvalue(), pwd->getsvalue()));
+		servers.push_back(new Srv(host->getsvalue(), port->getsvalue(), pwd->getsvalue(), hostid->getsvalue()));
 	}
     }
     if (!servers.empty())
@@ -209,10 +214,11 @@ int SrvList::counthosts()
 //=============================================================================================
 
 
-Srv::Srv(const char* shost, const char* sport, const char* pwd) : TConnect(shost, sport)
+Srv::Srv(const char* shost, const char* sport, const char* pwd, const char* hostid) : TConnect(shost, sport)
 {
     allprojectsdom = NULL;
     this->pwd = strdup(pwd);
+    this->hostid = strdup(hostid);
     lastmsgno = 0;
     active = false;
     loginfail = false;

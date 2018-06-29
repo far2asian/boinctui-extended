@@ -35,7 +35,7 @@ class Config
     int   getivalue(const char* name) { return getivalue(getcfgptr(), name); }; //ищет name начиная с корня
     void  setivalue(Item* node, const char* name, int value); // Will create a sub-name in the node with value
     void  setivalue(const char* name, int value) { setivalue(getcfgptr(), name, value); }; // Will create a sub-name in the node with value
-    void  addhost(const char* host, const char* port, const char* pwd);
+    void  addhost(const char* host, const char* port, const char* pwd, const char* hostid);
     bool  isdefault; // True if the config is not found and the default was created
     std::string errmsg; // Error message received when downloading the config file
   protected:
