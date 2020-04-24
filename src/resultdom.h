@@ -22,7 +22,7 @@
 #include <vector>
 #include <list>
 #include <stdlib.h>
-
+#include <clocale>
 
 class Item //элемент дерева данных (например <disk_usage>1129827635.000000</disk_usage>)
 {
