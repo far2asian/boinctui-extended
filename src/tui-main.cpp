@@ -21,7 +21,7 @@
 #else
     #include <curses.h>
 #endif
-#include <malloc.h>
+#include <cstdlib>
 #include "kclog.h"
 #include "mainprog.h"
 
