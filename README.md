@@ -24,20 +24,40 @@ Additionally other changes by me and from around GitHub have been merged into th
 - Typos and some UI strings corrected
 - & other code improvements (addressed some cppcheck warnings & some build environment stuff)
 
-## Compiling
+## Dependencies and Compiling 
 Dead easy, but you'll need to install a few libraries first. Here's some instructions 
 for Raspbian, which is what I'm doing this on. I have no idea if the package names are 
 different on other distributions.
 
+If you don't have ```git``` installed, install it now: 
+
+```sudo apt-get install git```
+
+Clone this repo: 
+
+```git clone https://github.com/mpentler/boinctui-extended.git```
+
+now install the dependencies:
+
 ```
-sudo apt-get install libssl-dev libexpat1-dev libncursesw5-dev
+sudo apt-get install libssl-dev libexpat1-dev libncursesw5-dev libgnutls-openssl27 autoconf make boinc-client
 ```
+
+When complete, enter the boinctui-extended folder: 
+
+```cd boinctui-extended```
 
 Then to compile:
 
 ```
 autoconf
+```
+
+```
 ./configure
+```
+
+```
 make
 ```
 
@@ -46,6 +66,8 @@ Finally, to install:
 ```
 sudo make install
 ```
+
+and you're done!
 
 ## Configuration
 After starting the application you can do a few things:
@@ -79,3 +101,4 @@ Additions to the original codebase that aren't mine are from the following GitHu
 - DerVerruckteFuchs - transparent backgrounds
 - zeekec - improved time display, menu hot key, and some code & build improvements
 - vorot93 - code improvements
+- rustyshackleford36 - rewrite of readme.md
