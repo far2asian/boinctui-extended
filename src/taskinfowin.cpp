@@ -149,11 +149,11 @@ std::string raw2hr (Item* item)
 	if (d < 1)
 	{
 		d *= 1024;
-		result << std::setprecision(4) << d << "Mb";
+		result << std::setprecision(4) << d << "MB";
 	}
 	else
 	{
-		result << std::setprecision(4) << d << "Gb";
+		result << std::setprecision(4) << d << "GB";
 	}
     }
     return result.str();
