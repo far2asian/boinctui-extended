@@ -487,7 +487,21 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr2," %6s", "?");
 		}
-		//колонка 5 время дедлайн
+		//колонка 5 received time column
+		if(iscolvisible(column++))
+		{
+		    Item* received_time = (*it)->findItem("received_time");
+		    int attr2 = attr;
+		    if (received_time != NULL)
+		    {
+			double dtime = received_time->getdvalue();
+			double beforedl = time(NULL) - dtime; //число секунд до дедлайна
+			cs->append(attr2," %6s", gethumanreadabletimestr(beforedl).c_str());
+		    }
+		    else
+			cs->append(attr," %6s", "?");
+		}
+		//колонка 6 время дедлайн
 		if(iscolvisible(column++))
 		{
 		    Item* report_deadline = (*it)->findItem("report_deadline");
@@ -503,7 +517,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr2," %6s", "?");
 		}
-		//колонка 6 имя приложения
+		//колонка 7 имя приложения
 		if(iscolvisible(column++))
 		{
 		    char buf[256];
@@ -523,7 +537,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 			mbstrtrunc(buf,30);
 		    cs->append(attr,"  %-30s", buf);
 		}
-		//колонка 7 имя задачи
+		//колонка 8 имя задачи
 		if(iscolvisible(column++))
 		    cs->append(attr,"  %s", name->getsvalue()); 
 		//добавляем сформированную строку и поле данных с именем задачи (для селектора)
