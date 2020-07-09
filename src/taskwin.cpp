@@ -552,6 +552,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 			}
 			else
 			{
+			    d /= 1024;
 			    snprintf(buf, sizeof(buf),"%.3f%s", d,"GB");
 			}
 			cs->append(attr2," %6s", buf);
