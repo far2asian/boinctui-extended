@@ -47,7 +47,7 @@
 #define M_ALL_TASKS			"All tasks"
 #define M_HIDE_DONE			"Hide done tasks"
 #define M_ACTIVE_ONLY			"Active tasks only"
-#define M_UNSORTED			"Unsorted tasks list"
+#define M_SORT_BY_REC			"Sort by received time"
 #define M_SORT_BY_STATE			"Sort by state"
 #define M_SORT_BY_DONE			"Sort by done %"
 #define M_SORT_BY_PROJECT		"Sort by project name"
@@ -298,7 +298,7 @@ ViewSubMenu::ViewSubMenu(NRect rect/*, Config* cfg*/) : NMenu(rect)
 	    taskssortmode = tasks_sort_mode->getivalue();
 	}
     }
-    additem(M_UNSORTED,         (taskssortmode == 0) ? "(*)" : "( )");
+    additem(M_SORT_BY_REC,      (taskssortmode == 0) ? "(*)" : "( )");
     additem(M_SORT_BY_STATE,    (taskssortmode == 1) ? "(*)" : "( )");
     additem(M_SORT_BY_DONE,     (taskssortmode == 2) ? "(*)" : "( )");
     additem(M_SORT_BY_PROJECT,  (taskssortmode == 3) ? "(*)" : "( )");
@@ -352,7 +352,7 @@ bool ViewSubMenu::action()
 	return true;
     }
 
-    if ( strcmp(item_name(current_item(menu)), M_UNSORTED) == 0 )
+    if ( strcmp(item_name(current_item(menu)), M_SORT_BY_REC) == 0 )
     {
 	putevent(new TuiEvent(evSORTMODECH, 0));
 	return true;
