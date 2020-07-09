@@ -537,9 +537,31 @@ void TaskWin::updatedata() //обновить данные с сервера
 			mbstrtrunc(buf,30);
 		    cs->append(attr,"  %-30s", buf);
 		}
-		//колонка 8 имя задачи
+		//колонка 8 swap size
 		if(iscolvisible(column++))
-		    cs->append(attr,"  %s", name->getsvalue()); 
+		{
+		    Item* swap_size = (*it)->findItem("swap_size");
+		    int attr2 = attr;
+		    if (swap_size != NULL)
+		    {
+			double d = swap_size->getdvalue()/(1024*1024);
+			char buf[64];
+			if (d <= 1024)
+			{
+			    snprintf(buf, sizeof(buf),"%.1f%s", d,"MB");
+			}
+			else
+			{
+			    snprintf(buf, sizeof(buf),"%.3f%s", d,"GB");
+			}
+			cs->append(attr2," %6s", buf);
+		    }
+		    else
+			cs->append(attr," %6s ", " - ");
+		}
+		//колонка 9 имя задачи
+		if(iscolvisible(column++))
+		    cs->append(attr,"   %s", name->getsvalue());
 		//добавляем сформированную строку и поле данных с именем задачи (для селектора)
 		//addstring(strdup(name->getsvalue()),cs);
 		addstring(new TaskInfo(name->getsvalue(),(*it)->findItem("project_url")->getsvalue()), cs);
