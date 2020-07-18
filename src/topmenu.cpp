@@ -41,6 +41,7 @@
 #define M_VIEW_DONE			"Percent done column"
 #define M_VIEW_PROJECT			"Project name column"
 #define M_VIEW_ESTIMATE			"Estimate time column"
+#define M_VIEW_RECEIVED			"Received time column"
 #define M_VIEW_DEADLINE			"Deadline time column"
 #define M_VIEW_APPNAME			"Application name column"
 #define M_VIEW_TASKNAME			"Task name column"
@@ -270,6 +271,7 @@ ViewSubMenu::ViewSubMenu(NRect rect/*, Config* cfg*/) : NMenu(rect)
     additem(M_VIEW_DONE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_PROJECT, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_ESTIMATE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
+    additem(M_VIEW_RECEIVED, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_DEADLINE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_APPNAME, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_TASKNAME, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
