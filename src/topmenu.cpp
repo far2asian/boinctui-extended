@@ -44,6 +44,7 @@
 #define M_VIEW_RECEIVED			"Received time column"
 #define M_VIEW_DEADLINE			"Deadline time column"
 #define M_VIEW_APPNAME			"Application name column"
+#define M_VIEW_SWAPSIZE			"Swap size column"
 #define M_VIEW_TASKNAME			"Task name column"
 #define M_ALL_TASKS			"All tasks"
 #define M_HIDE_DONE			"Hide done tasks"
@@ -274,6 +275,7 @@ ViewSubMenu::ViewSubMenu(NRect rect/*, Config* cfg*/) : NMenu(rect)
     additem(M_VIEW_RECEIVED, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_DEADLINE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_APPNAME, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
+    additem(M_VIEW_SWAPSIZE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_TASKNAME, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem("","");
     int taskslistmode = 0;
