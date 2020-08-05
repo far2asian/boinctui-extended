@@ -182,6 +182,20 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
                     wmain->updatecaption();
                 }
                 break;
+	    case 'F':
+	    case 'f':
+		if (getitembyid(typeid(PrefForm).name()) == NULL)
+		{
+		    menu->disable();
+		    PrefForm* prefform = new PrefForm(15,76/*,cfg*/);
+		    insert(prefform);
+		    prefform->settitle("Preferences");
+		    prefform->refresh();
+		    uistate = uistate | stUIMODALFORM;
+		    updatestatuslinecontent();
+		}
+		break;
+
 	    case 'c':
 	    case 'C':
 		if (getitembyid(typeid(CfgForm).name()) == NULL)
@@ -243,6 +257,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		menu->disable();
 		//деструктим все какие есть модельные окна
 		destroybyid(typeid(CfgForm).name()); //деструктим форму
+		destroybyid(typeid(PrefForm).name()); //деструктим форму
 		destroybyid(typeid(NMessageBox).name()); //деструктим форму
 		if (destroybyid(typeid(StatWin).name())) //деструктим форму
 		    uistate = uistate & ~stUISTATWIN;
@@ -278,6 +293,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 	    {
 		menu->disable();
 		destroybyid(typeid(CfgForm).name()); //деструктим форму
+		destroybyid(typeid(PrefForm).name()); //деструктим форму
 		//реакция на изменение конфига
 		gsrvlist->refreshcfg();
 		wmain->setserver(gsrvlist->getcursrv()); //отображать первый в списке сервер

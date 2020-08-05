@@ -34,6 +34,7 @@
 #define M_CONFIG_HOSTS			"Configure host list"
 #define M_VIEW_STATS			"View Statistics"
 #define M_RUN_BENCHMARKS		"Run CPU benchmarks"
+#define M_HOST_PREFERENCES		"Host Preferences"
 #define M_QUIT				"Quit boinctui-extended"
 //Названия пунктов меню "View"
 #define M_VIEW_NUMBER			"Task number column"
@@ -237,6 +238,7 @@ FileSubMenu::FileSubMenu(NRect rect) : NMenu(rect)
     additem(M_CONFIG_HOSTS,"  C");
     additem(M_VIEW_STATS,"  V");
     additem(M_RUN_BENCHMARKS,"");
+    additem(M_HOST_PREFERENCES,"  F");
     additem(M_QUIT,"  Q");
     additem(NULL,NULL);
 }
@@ -255,6 +257,8 @@ bool FileSubMenu::action()
 	putevent(new NEvent(NEvent::evKB, 'V')); //создаем событие иммитирующее нажатие 'V'
     if ( strcmp(item_name(current_item(menu)),M_RUN_BENCHMARKS) == 0 )
 	putevent(new TuiEvent(evBENCHMARK)); //NEvent(NEvent::evPROG, 5)); //создаем событие запускающее бенчмарк
+    if ( strcmp(item_name(current_item(menu)),M_HOST_PREFERENCES) == 0 )
+	putevent(new NEvent(NEvent::evKB, 'F')); //создаем событие иммитирующее нажатие 'F'
     if ( strcmp(item_name(current_item(menu)),M_QUIT) == 0 )
 	putevent(new NEvent(NEvent::evKB, 'Q')); //создаем событие иммитирующее нажатие 'Q'
     return true;

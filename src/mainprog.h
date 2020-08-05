@@ -23,6 +23,7 @@
 #include "taskwin.h"
 #include "mainwin.h"
 #include "cfgform.h"
+#include "prefform.h"
 #include "cfg.h"
 #include "srvdata.h"
 #include "topmenu.h"

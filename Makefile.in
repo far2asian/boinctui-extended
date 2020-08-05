@@ -9,7 +9,7 @@ SRCS	= ncolorstring.cpp nhline.cpp nvline.cpp nscrollview.cpp nselectlist.cpp nv
 	  nscrollbar.cpp \
           kclog.cpp cfg.cpp srvdata.cpp mbstring.cpp net.cpp resultparse.cpp resultdom.cpp \
           mainprog.cpp infopanel.cpp mainwin.cpp msgwin.cpp taskwin.cpp tui-main.cpp  \
-          cfgform.cpp topmenu.cpp about.cpp helpwin.cpp addprojectform.cpp addmgrform.cpp \
+          prefform.cpp cfgform.cpp topmenu.cpp about.cpp helpwin.cpp addprojectform.cpp addmgrform.cpp \
 	  taskinfowin.cpp statwin.cpp
 
 OBJS	= $(patsubst %.cpp,$(ODIR)/%.o,$(SRCS))
