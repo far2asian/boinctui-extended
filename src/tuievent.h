@@ -34,6 +34,7 @@ enum TuiEventType
     evVIEWMODECH,	// Switch visibility mode - All/Hide done/Active tasks only
     evSORTMODECH,	// Switch view mode - 0-unsorted 1-state e.t.c.
     evADDACCMGR,	// Add account manager form
+    evACTPREF,		// Activity preferences form
     evPROJECTOP,	// Project operations
     evTASKINFO,		//генерируется когда нужно открыть окно детальной информации о задаче
     evTASKSELECTORON,	// Triggers when the task becomes visible

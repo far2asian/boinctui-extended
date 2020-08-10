@@ -182,20 +182,6 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
                     wmain->updatecaption();
                 }
                 break;
-	    case 'F':
-	    case 'f':
-		if (getitembyid(typeid(PrefForm).name()) == NULL)
-		{
-		    menu->disable();
-		    PrefForm* prefform = new PrefForm(15,76/*,cfg*/);
-		    insert(prefform);
-		    prefform->settitle("Preferences");
-		    prefform->refresh();
-		    uistate = uistate | stUIMODALFORM;
-		    updatestatuslinecontent();
-		}
-		break;
-
 	    case 'c':
 	    case 'C':
 		if (getitembyid(typeid(CfgForm).name()) == NULL)
@@ -257,7 +243,6 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		menu->disable();
 		//деструктим все какие есть модельные окна
 		destroybyid(typeid(CfgForm).name()); //деструктим форму
-		destroybyid(typeid(PrefForm).name()); //деструктим форму
 		destroybyid(typeid(NMessageBox).name()); //деструктим форму
 		if (destroybyid(typeid(StatWin).name())) //деструктим форму
 		    uistate = uistate & ~stUISTATWIN;
@@ -293,7 +278,6 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 	    {
 		menu->disable();
 		destroybyid(typeid(CfgForm).name()); //деструктим форму
-		destroybyid(typeid(PrefForm).name()); //деструктим форму
 		//реакция на изменение конфига
 		gsrvlist->refreshcfg();
 		wmain->setserver(gsrvlist->getcursrv()); //отображать первый в списке сервер
@@ -379,6 +363,26 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 			AddAccMgrForm* addmgrform = new AddAccMgrForm(30,65,ev1->srv,ev1->sdata1.c_str());
 			insert(addmgrform);
 			addmgrform->move(getmaxy(stdscr)/2-addmgrform->getheight()/2,getmaxx(stdscr)/2-addmgrform->getwidth()/2); //центрируем
+			uistate = uistate | stUIMODALFORM;
+		    }
+		}
+		else
+		    uistate = uistate & ~stUIMODALFORM;
+		updatestatuslinecontent();
+		break;
+	    }
+	    case evACTPREF:
+	    {
+		if (!destroybyid(typeid(PrefForm).name()))
+		{
+		    TuiEvent* ev1 = (TuiEvent*)ev;
+		    Srv* srv = gsrvlist->getcursrv();
+		    if (ev1->srv != NULL)
+		    {
+			PrefForm* prefform = new PrefForm(30,65,ev1->srv,ev1->sdata1.c_str());
+			insert(prefform);
+			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
+			prefform->settitle("Preferences");
 			uistate = uistate | stUIMODALFORM;
 		    }
 		}

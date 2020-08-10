@@ -34,7 +34,6 @@
 #define M_CONFIG_HOSTS			"Configure host list"
 #define M_VIEW_STATS			"View Statistics"
 #define M_RUN_BENCHMARKS		"Run CPU benchmarks"
-#define M_HOST_PREFERENCES		"Host Preferences"
 #define M_QUIT				"Quit boinctui-extended"
 //Названия пунктов меню "View"
 #define M_VIEW_NUMBER			"Task number column"
@@ -92,6 +91,7 @@
 #define M_NET_ACTIVITY_ALWAYS		"Network activity always available"
 #define M_NET_ACTIVITY_AUTO		"Network activity based on preferences"
 #define M_NET_ACTIVITY_NEVER		"Network activity suspend"
+#define M_ACTIVITY_PREF			"Activity Preferences"
 //Названия пунктов меню "Help"
 #define M_ABOUT				"About"
 #define M_KEY_BINDINGS			"Hot keys list"
@@ -238,7 +238,6 @@ FileSubMenu::FileSubMenu(NRect rect) : NMenu(rect)
     additem(M_CONFIG_HOSTS,"  C");
     additem(M_VIEW_STATS,"  V");
     additem(M_RUN_BENCHMARKS,"");
-    additem(M_HOST_PREFERENCES,"  F");
     additem(M_QUIT,"  Q");
     additem(NULL,NULL);
 }
@@ -257,8 +256,6 @@ bool FileSubMenu::action()
 	putevent(new NEvent(NEvent::evKB, 'V')); //создаем событие иммитирующее нажатие 'V'
     if ( strcmp(item_name(current_item(menu)),M_RUN_BENCHMARKS) == 0 )
 	putevent(new TuiEvent(evBENCHMARK)); //NEvent(NEvent::evPROG, 5)); //создаем событие запускающее бенчмарк
-    if ( strcmp(item_name(current_item(menu)),M_HOST_PREFERENCES) == 0 )
-	putevent(new NEvent(NEvent::evKB, 'F')); //создаем событие иммитирующее нажатие 'F'
     if ( strcmp(item_name(current_item(menu)),M_QUIT) == 0 )
 	putevent(new NEvent(NEvent::evKB, 'Q')); //создаем событие иммитирующее нажатие 'Q'
     return true;
@@ -618,6 +615,8 @@ ActivitySubMenu::ActivitySubMenu(NRect rect, Srv* srv) : NMenu(rect)
 	additem(M_ACTIVITY_ALWAYS, ((task_mode!=NULL)&&(task_mode->getivalue() == 1)) ? "(*)" : "( )"); //1 always
 	additem(M_ACTIVITY_AUTO,((task_mode!=NULL)&&(task_mode->getivalue() == 2)) ? "(*)" : "( )"); 	//2 pref
 	additem(M_ACTIVITY_NEVER,((task_mode!=NULL)&&(task_mode->getivalue() == 3)) ? "(*)" : "( )"); 	//3 never
+	additem("",""); //delimiter
+	additem(M_ACTIVITY_PREF,"");
 	if (!srv->statedom.empty())
 	{
 	    Item* tmpstatedom = srv->statedom.hookptr();
@@ -655,6 +654,8 @@ bool ActivitySubMenu::action()
 	    srv->opactivity("auto");
 	if ( strcmp(item_name(current_item(menu)),M_ACTIVITY_NEVER) == 0 )
 	    srv->opactivity("never");
+	if ( strcmp(item_name(current_item(menu)),M_ACTIVITY_PREF) == 0 )
+	    putevent(new TuiEvent(evACTPREF, srv, item_name(current_item(menu))));
 	if ( strcmp(item_name(current_item(menu)),M_GPU_ACTIVITY_ALWAYS) == 0 )
 	    srv->opgpuactivity("always");
 	if ( strcmp(item_name(current_item(menu)),M_GPU_ACTIVITY_AUTO) == 0 )

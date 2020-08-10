@@ -15,114 +15,159 @@
 // <http://www.gnu.org/licenses/>.
 // =============================================================================
 
+#include <ctype.h>
 #include "prefform.h"
 #include "mbstring.h"
 #include "kclog.h"
 #include "tuievent.h"
 
 
-PrefForm::PrefForm(int rows, int cols/*, Config* cfg*/) : NForm(rows,cols)
+char* strlowcase(char* s); // To lower case
+
+
+PrefForm::PrefForm(int rows, int cols,  Srv* srv, const char* mgrname) : NForm(rows,cols)
 {
-    genfields(false);
-    //set_form_fields(frm, fields);
+    this->srv = srv;
+    settitle(mgrname);
+    this->mgrname = mgrname;
+    Item* account_manager = NULL;
+    if (srv !=NULL)
+	account_manager = srv->findaccountmanager(mgrname);
+    // Margins
+    int row = 0;
+    genfields(row,account_manager);
+    // Recalculate the height of the form, so that all the fields look right
+    int r,c =0;
+    scale_form(frm, &r, &c);
+    kLogPrintf("field_count=%d scale_form()->%d,%d\n", field_count(frm), r, c);
+    resize(r+3,c+2);
+
+    set_current_field(frm, fields[0]); // Set focus on first field
+
     post_form(frm);
+    this->refresh();
 }
 
 
-void PrefForm::genfields(bool extfields) // Create an array of fields (extfields is set if you need to add a host)
+void PrefForm::genfields(int& line, Item* mgr) //создаст массив полей
 {
+    FIELD* f;
     delfields();
-    this->extfields = extfields;
-    // Read from config
-    Item* boinctui_cfg = gCfg->getcfgptr();
-    if (boinctui_cfg == NULL)
-	return;
-    std::vector<Item*> slist = boinctui_cfg->getItems("server");
-    if (slist.empty())
-	extfields = true;
-    // Input field for servers
-    nhost = slist.size(); // Number of servers
-    if (extfields)
-	nhost++; // New additional host
-    std::vector<Item*>::iterator it;
-    int i  = 0; // Host number
-    int nl = 2; // Screen line number
-    // Static field header for hosts
-    FIELD* field   = addfield(new_field(1, 53, nl, 5, 0, 0));
-    field_opts_off(field, O_ACTIVE); // Static text
-    set_field_buffer(field, 0, "host             port   pwd                   host id");
-    set_field_back(field, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    nl = nl + 1;
-    // Fields for hosts
-    for (i = 0; i < nhost; i++) // Loop through hosts
+    // Error message
+    errmsgfield = getfieldcount();
+    f = addfield(new_field(1, getwidth()-2, line++, 0, 0, 0));
+    set_field_buffer(f, 0, "Error");
+    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
+    field_opts_off(f, O_VISIBLE); // Default is invisible
+    // Get the url and the name of the manager (either from the config or from the boinc client)
+    if (mgr != NULL)
     {
-	// Host field
-	field = addfield(new_field(1, 15, nl, 5, 0, 0));
-	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-	field_opts_off(field, O_AUTOSKIP);
-	field_opts_off(field, O_STATIC);
-	set_max_field(field,128); //max width 128
-	//set_field_type(field[nf], TYPE_ALNUM, 0);
-	if (i < slist.size())
-	{
-	    Item* host = slist[i]->findItem("host");
-	    if (host != NULL)
-		set_field_buffer(field, 0, host->getsvalue());
-	}
-	if (i == 0)
-	    set_current_field(frm, field); // Set field focus
-	// Port field
-	field = addfield(new_field(1, 5, nl, 22, 0, 0));
-	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-	set_field_type(field, TYPE_INTEGER, 0, 0, 65535);
-        field_opts_off(field, O_AUTOSKIP);
-	if (i < slist.size())
-	{
-	    Item* port = slist[i]->findItem("port");
-	    if (port != NULL)
-		set_field_buffer(field, 0, port->getsvalue());
-	}
-	// Password field
-	field = addfield(new_field(1, 20, nl, 29, 0, 0));
-	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-	field_opts_off(field, O_AUTOSKIP);
-	field_opts_off(field, O_STATIC);
-	set_max_field(field,128); //max width 128
-	if (i < slist.size())
-	{
-	    Item* pwd = slist[i]->findItem("pwd");
-	    if (pwd != NULL)
-		set_field_buffer(field, 0, pwd->getsvalue());
-	}
-	// hostid field
-	field = addfield(new_field(1, 20, nl, 51, 0, 0));
-	set_field_back(field, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-	field_opts_off(field, O_AUTOSKIP);
-	field_opts_off(field, O_STATIC);
-	set_max_field(field,128);
-	if (i < slist.size())
-	{
-	    Item* hostid = slist[i]->findItem("hostid");
-	    if (hostid != NULL)
-		set_field_buffer(field, 0, hostid->getsvalue());
-	}
-	nl = nl + 2;
+        Item* url = mgr->findItem("url");
+        if (url !=NULL)
+	    mgrurl = url->getsvalue();
     }
-    // Control keys
-    nl++;
-    field = addfield(new_field(1, 44, nl, 5, 0, 0));
-    field_opts_off(field, O_ACTIVE); // Static text
-    if (extfields)
-	set_field_buffer(field, 0, "Esc-Cancel   Enter-Accept");
     else
-	set_field_buffer(field, 0, "Esc-Cancel   Enter-Accept   Ins-Add host");
-    set_field_back(field, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    nl = nl + 2;
+    {
+        // Take the url from the config (if any)
+	Item* boinctui_cfg = gCfg->getcfgptr();
+	if (boinctui_cfg != NULL)
+	{
+	    std::vector<Item*> mgrlist = boinctui_cfg->getItems("accmgr");
+	    std::vector<Item*>::iterator it;
+	    for (it = mgrlist.begin(); it != mgrlist.end(); it++)
+	    {
+		Item* name = (*it)->findItem("name");
+		if (name != NULL)
+		    if (name->getsvalue() == mgrname)
+		    {
+			Item* url = (*it)->findItem("url");
+			if (url != NULL)
+			{
+			    mgrurl = url->getsvalue();
+			    break;
+			}
+		    }
+	    }
+	}
+    }
+    // Manager name
+    f = addfield(new_field(1, getwidth()-4, line, 2, 0, 0));
+    set_field_buffer(f, 0, "Description  ");
+    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
+    namefield = getfieldcount();
+    f = addfield(new_field(1, 40, line++, 15, 0, 0));
+    if (mgr != NULL)
+    {
+	field_opts_off(f, O_STATIC);
+	field_opts_off(f, O_ACTIVE); // Static text
+    }
+    else
+	set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+    field_opts_off(f, O_AUTOSKIP);
+    set_max_field(f,128); // Max width 128
+    char buf[129];
+    strncpy(buf, gettitle(), 128);
+    buf[128] = '\0';
+    char* p;
+    p = ltrim(buf);
+    rtrim(buf);
+    set_field_buffer(f, 0, p);
+    // url
+    line++;
+    f = addfield(new_field(1, getwidth()-4, line, 2, 0, 0));
+    set_field_buffer(f, 0, "URL          ");
+    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
+    urlfield = getfieldcount();
+    f = addfield(new_field(1, 40, line++, 15, 0, 0));
+    if (mgr != NULL)
+    {
+	field_opts_off(f, O_STATIC);
+	field_opts_off(f, O_ACTIVE); // Static text
+    }
+    else
+	set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+    field_opts_off(f, O_AUTOSKIP);
+    set_max_field(f,128); // Max width 128
+    set_field_buffer(f, 0, mgrurl.c_str());
+    // Help text
+    line++;
+    f = addfield(new_field(3, getwidth()-4, line++, 2, 0, 0));
+    set_field_buffer(f, 0,  "If you have not yet registered with this account manager" \
+    			"     please do so before proceeding.");
+    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
+    line = line + 2;
+    // User name
+    line++;
+    f = addfield(new_field(1, 10, line, 2 , 0, 0));
+    set_field_buffer(f, 0, "username");
+    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
+    usernamefield = getfieldcount();
+    f = addfield(new_field(1, 40, line++, 15, 0, 0));
+    field_opts_off(f, O_AUTOSKIP);
+    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+    // Password
+    line++;
+    f = addfield(new_field(1, 10, line, 2 , 0, 0));
+    set_field_buffer(f, 0, "password");
+    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
+    passwfield = getfieldcount();
+    f = addfield(new_field(1, 40, line++, 15, 0, 0));
+    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+    field_opts_off(f, O_AUTOSKIP);
+    // Control keys
+    line++;
+    f = addfield(new_field(1, getwidth()-25, line++, 20 , 0, 0));
+    set_field_buffer(f, 0, "Enter-Ok    Esc-Cancel");
+    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+    field_opts_off(f, O_ACTIVE); // Static text
     // Finalise the list of fields
     addfield(NULL);
-    // Recalculaye form height so everything looks right
-    resize(nl + 2,getwidth());
-    move(getmaxy(stdscr)/2-getheight()/2,getmaxx(stdscr)/2-getwidth()/2);
 }
 
 
@@ -133,40 +178,97 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
     NMouseEvent* mevent = (NMouseEvent*)ev;
     if ( ev->type == NEvent::evMOUSE)
     {
-	//if (isinside(mevent->row, mevent->col))
-	    NForm::eventhandle(ev); //предок
+	NForm::eventhandle(ev); //предок
     }
     if ( ev->type == NEvent::evKB )
     {
 	ev->done = true;
         switch(ev->keycode)
 	{
-	    case KEY_IC: //INSERT
-		if (!extfields)
-		{
-		    unpost_form(frm);
-		    genfields(true);
-		    post_form(frm);
-		    refresh();
-		    kLogPrintf("INSERT NEW HOST\n");
-		}
-		break;
 	    case KEY_ENTER:
-	    case '\n': // Enter
+	    case '\n': // ENTER
 	    {
 		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
-		kLogPrintf("ENTER\n");
-		updatecfg(); // Update data in config
-		gCfg->save(); // Save to disk
-		//gsrvlist->refreshcfg();
-		//ev->keycode = 27; //костыль чтобы осн программа сдестркутила форму конфига
-		NEvent* event = new TuiEvent(evCFGCH);//NEvent(NEvent::evPROG, 1); // Create a software event
-		putevent(event);
+		char* username = rtrim(field_buffer(fields[usernamefield],0));
+		char* passw = rtrim(field_buffer(fields[passwfield],0));
+		mgrurl = rtrim(field_buffer(fields[urlfield],0));
+		char* mgrname = rtrim(field_buffer(fields[namefield],0));
+		kLogPrintf("PrefForm OK username=[%s] passw=[%s]\n", username, passw);
+		if (srv!=NULL)
+		{
+		    std::string errmsg;
+		    bool success = srv->accountmanager(mgrurl.c_str(), username, passw, false, errmsg);
+		    if (success)
+		    {
+			Item* account_manager = NULL;
+			if (srv !=NULL)
+			    account_manager = srv->findaccountmanager(mgrname);
+			if (account_manager == NULL) // For custom managers we save in configs
+			{
+			    // Check if the account manager is already in the config
+			    // Then we either update the existing record, otherwise add a new one
+			    bool exist = false;
+			    Item* boinctui_cfg = gCfg->getcfgptr();
+			    if (boinctui_cfg != NULL)
+			    {
+				std::vector<Item*> mgrlist = boinctui_cfg->getItems("accmgr");
+				std::vector<Item*>::iterator it;
+				for (it = mgrlist.begin(); it != mgrlist.end(); it++)
+				{
+				    Item* namecfg = (*it)->findItem("name");
+				    Item* urlcfg =  (*it)->findItem("url");
+				    if (namecfg != NULL)
+					if (strcmp(namecfg->getsvalue(),mgrname) == 0)
+					{
+					    exist = true;
+					    // Update the URL value in the config
+					    Item* urlcfg = (*it)->findItem("url");
+					    if (urlcfg != NULL)
+						urlcfg->setsvalue(mgrurl.c_str());
+					}
+				    if (urlcfg != NULL)
+				    {
+					if (strcmp(urlcfg->getsvalue(),mgrurl.c_str()) == 0)
+					{
+					    exist = true;
+					    // Update the value of the name in the config
+					    Item* namecfg = (*it)->findItem("name");
+					    if (namecfg != NULL)
+						namecfg->setsvalue(mgrname);
+					}
+				    }
+				    if (exist)
+					break;
+				}
+				if (!exist)
+				{
+				    // Write to config as new
+				    Item* accmgr  = new Item("accmgr");
+				    boinctui_cfg->addsubitem(accmgr);
+				    Item* name  = new Item("name");
+				    name->setsvalue(mgrname);
+				    Item* url  = new Item("url");
+				    url->setsvalue(mgrurl.c_str());
+				    accmgr->addsubitem(name);
+				    accmgr->addsubitem(url);
+				}
+			    }
+			}
+			putevent(new TuiEvent(evADDACCMGR)); // Create an event to close the form
+		    }
+		    else
+		    {
+			// Error message
+			errmsg = " Error: " + errmsg;
+			set_field_buffer(fields[errmsgfield], 0, errmsg.c_str());
+			field_opts_on(fields[errmsgfield], O_VISIBLE); // Make error line visible
+			this->refresh();
+		    }
+		}
 		break;
 	    }
 	    case 27:
-		kLogPrintf("ESC\n");
-		ev->done = false; //нет реакции на этот код (пусть получает владелец)
+		putevent(new TuiEvent(evACTPREF, srv, mgrname.c_str())); // Window closing code
 		break;
 	    default:
 		kLogPrintf("PrefForm::KEYCODE=%d\n", ev->keycode);
@@ -174,32 +276,5 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
 		NForm::eventhandle(ev); //предок
 		break;
 	} //switch
-    }
-}
-
-
-void	PrefForm::updatecfg() // Saves data from form to config
-{
-    Item* boinctui_cfg = gCfg->getcfgptr();
-    if (boinctui_cfg == NULL)
-	return;
-    if (fields == NULL)
-	return;
-    // Delete all old server entries from the config
-    std::vector<Item*> slist = boinctui_cfg->getItems("server");
-    std::vector<Item*>::iterator it;
-    for (it = slist.begin(); it != slist.end(); it++)
-	boinctui_cfg->delsubitem(*it);
-    // Create new records
-    //int n = field_count(frm);
-    for (int i = 0; i < nhost; i++) // Cycle through hosts from form
-    {
-	int nf = 1 + i*4; // Hostname field number
-	char* shost = rtrim(field_buffer(fields[nf],0));
-	char* sport = rtrim(field_buffer(fields[nf+1],0));
-	char* spwd  = rtrim(field_buffer(fields[nf+2],0));
-	char* shostid = rtrim(field_buffer(fields[nf+3],0));
-	kLogPrintf("SERVER %d [%s:%s <%s> ID: %s]\n", i, shost, sport, spwd, shostid);
-	gCfg->addhost(shost, sport, spwd, shostid);
     }
 }

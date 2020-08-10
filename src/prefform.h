@@ -21,22 +21,26 @@
 #include <string.h>
 #include <stdlib.h>
 #include "nform.h"
-#include "cfg.h"
 #include "nstatictext.h"
-
+#include "srvdata.h"
 
 class PrefForm : public NForm
 {
   public:
-    PrefForm(int lines, int rows/*, Config* cfg*/);
-    void genfields(bool extfields); // Create an array of fields (extfields if you need to add a host)
+    PrefForm(int lines, int rows, Srv* srv, const char* mgrname);
+    void genfields(int& line, Item* mgr); // Create an array of fields
     virtual void eventhandle(NEvent* ev); // Event handler
   protected:
-    void	updatecfg(); // Saves data from form to config
-    //Config* 	cfg;
-    bool	extfields; // True if the field for the additional host is visible
-    int		nhost; //макс номер хоста с 0го (включаа дополнительный если есть)
+    int         namefield;
+    int         passwfield;
+    int         errmsgfield;
+    int         usernamefield;
+    int         urlfield;
+    Srv*        srv;
+    std::string mgrname; // Manager name
+    std::string mgrurl; // Manager URL
+
 };
 
 
-#endif //CFGFORM_H
+#endif //PREFFORM_H
