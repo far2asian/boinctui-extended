@@ -24,6 +24,7 @@
 #include <cstdlib>
 #include "kclog.h"
 #include "mainprog.h"
+#include <malloc.h>
 
 std::string locale;
 
