@@ -47,6 +47,7 @@ MainWin::MainWin(NRect rect/*, Config* cfg*/) : NGroup(rect)
     colname.push_back("   done%%");
     colname.push_back("  project             ");
     colname.push_back("    est");
+    colname.push_back("   used");
     colname.push_back("    rec");
     colname.push_back("    d/l");
     colname.push_back("  application                   ");

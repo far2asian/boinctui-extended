@@ -487,7 +487,25 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr2," %6s", "?");
 		}
-		//колонка 5 received time column
+		//колонка 5 elapsed time column
+		if(iscolvisible(column++))
+		{
+		    Item* elapsed_time = (*it)->findItem("elapsed_time");
+		    int attr2 = attr;
+		    if ( elapsed_time != NULL )
+		    {
+			double dtime = elapsed_time->getdvalue();
+			if ( ( sstate == "Run" )&&( dtime < 600)&&( dtime >= 0 ) ) //осталось [0-600[ сек
+			    attr2 = getcolorpair(COLOR_RED,-1) | A_BOLD;
+			if ( dtime >= 0)
+			    cs->append(attr2," %6s", gethumanreadabletimestr(dtime).c_str()); //естимейт
+			else
+			    cs->append(attr2," %6s", "?"); //естимейт отрицательный (BOINC bug?)
+		    }
+		    else
+			cs->append(attr2," %6s", "-");
+		}
+		//колонка 6 received time column
 		if(iscolvisible(column++))
 		{
 		    Item* received_time = (*it)->findItem("received_time");
@@ -501,7 +519,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr," %6s", "?");
 		}
-		//колонка 6 время дедлайн
+		//колонка 7 время дедлайн
 		if(iscolvisible(column++))
 		{
 		    Item* report_deadline = (*it)->findItem("report_deadline");
@@ -517,7 +535,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr2," %6s", "?");
 		}
-		//колонка 7 имя приложения
+		//колонка 8 имя приложения
 		if(iscolvisible(column++))
 		{
 		    char buf[256];
@@ -537,7 +555,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 			mbstrtrunc(buf,30);
 		    cs->append(attr,"  %-30s", buf);
 		}
-		//колонка 8 swap size
+		//колонка 9 swap size
 		if(iscolvisible(column++))
 		{
 		    Item* swap_size = (*it)->findItem("swap_size");
@@ -560,7 +578,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr," %6s ", " - ");
 		}
-		//колонка 9 имя задачи
+		//колонка 10 имя задачи
 		if(iscolvisible(column++))
 		    cs->append(attr,"   %s", name->getsvalue());
 		//добавляем сформированную строку и поле данных с именем задачи (для селектора)
