@@ -76,16 +76,23 @@ void InfoPanel::refresh()
     mvwprintw(win,6,0,"other            %3d",nothertasks);
 
     wattron(win,A_REVERSE);
-    mvwprintw(win,7,0,"      Storage       ");
+    mvwprintw(win,7,0,"      CPU           ");
     wattroff(win,A_REVERSE);
 
-    mvwprintw(win,8,0, "total     %8.2fGb",dtotal/(1024*1024*1024));
-    mvwprintw(win,9,0, "free      %8.2fGb",dfree/(1024*1024*1024));
-    mvwprintw(win,10,0,"allowed   %8.2fGb",dallowed/(1024*1024*1024));
-    mvwprintw(win,11,0,"in use    %8.2fGb",dboinc/(1024*1024*1024));
+    mvwprintw(win,8,0,"pct            %2.2f",dcpupct);
+    mvwprintw(win,9,0,"usage          %2.2f",dcpuusage);
 
     wattron(win,A_REVERSE);
-    mvwprintw(win,12,0,"     Statistics     ");
+    mvwprintw(win,10,0,"      Storage       ");
+    wattroff(win,A_REVERSE);
+
+    mvwprintw(win,11,0, "total     %8.2fGb",dtotal/(1024*1024*1024));
+    mvwprintw(win,12,0, "free      %8.2fGb",dfree/(1024*1024*1024));
+    mvwprintw(win,13,0,"allowed   %8.2fGb",dallowed/(1024*1024*1024));
+    mvwprintw(win,14,0,"in use    %8.2fGb",dboinc/(1024*1024*1024));
+
+    wattron(win,A_REVERSE);
+    mvwprintw(win,15,0,"     Statistics     ");
     wattroff(win,A_REVERSE);
 
     bool compact = true; // Compact stats output if user=host
@@ -241,6 +248,9 @@ void InfoPanel::updatedata()
 	} // Task list cycle
 	nothertasks = nalltasks-nruntasks-ndonetasks-nqueuetasks;
 	needrefresh = true;
+	std::vector<Item*> gps = client_state->getItems("global_preferences");
+	dcpupct = (*gps.begin())->findItem("max_ncpus_pct")->getdvalue();
+	dcpuusage = (*gps.begin())->findItem("cpu_usage_limit")->getdvalue();
     }
     // ===Disk Data===
     if (srv->dusagedom.empty())

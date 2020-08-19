@@ -79,6 +79,9 @@ class InfoPanel : public NView
     int nqueuetasks;
     int ndonetasks;
     int nothertasks;
+    // ---For preferences---
+    double dcpupct;
+    double dcpuusage;
     // ---For disk space---
     double dtotal;
     double dfree;

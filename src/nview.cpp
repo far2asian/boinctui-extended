@@ -101,7 +101,7 @@ void NView::refresh() //перерисовать
     {
 	#ifdef DEBUG
 	refreshcount++;
-	mvwprintw(win,0,getmaxx(win)-10,"r=%d",refreshcount);
+	//mvwprintw(win,0,getmaxx(win)-10,"r=%d",refreshcount);
 	#endif
 	update_panels();
 	//doupdate();
