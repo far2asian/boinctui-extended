@@ -248,9 +248,8 @@ void InfoPanel::updatedata()
 	} // Task list cycle
 	nothertasks = nalltasks-nruntasks-ndonetasks-nqueuetasks;
 	needrefresh = true;
-	std::vector<Item*> gps = client_state->getItems("global_preferences");
-	dcpupct = (*gps.begin())->findItem("max_ncpus_pct")->getdvalue();
-	dcpuusage = (*gps.begin())->findItem("cpu_usage_limit")->getdvalue();
+	dcpupct = client_state->findItem("max_ncpus_pct")->getdvalue();
+	dcpuusage = client_state->findItem("cpu_usage_limit")->getdvalue();
     }
     // ===Disk Data===
     if (srv->dusagedom.empty())
