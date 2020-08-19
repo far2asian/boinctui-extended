@@ -495,8 +495,6 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    if ( elapsed_time != NULL )
 		    {
 			double dtime = elapsed_time->getdvalue();
-			if ( ( sstate == "Run" )&&( dtime < 600)&&( dtime >= 0 ) ) //осталось [0-600[ сек
-			    attr2 = getcolorpair(COLOR_RED,-1) | A_BOLD;
 			if ( dtime >= 0)
 			    cs->append(attr2," %6s", gethumanreadabletimestr(dtime).c_str()); //естимейт
 			else

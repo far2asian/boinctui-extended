@@ -79,8 +79,8 @@ void InfoPanel::refresh()
     mvwprintw(win,7,0,"      CPU           ");
     wattroff(win,A_REVERSE);
 
-    mvwprintw(win,8,0,"pct            %2.2f",dcpupct);
-    mvwprintw(win,9,0,"usage          %2.2f",dcpuusage);
+    mvwprintw(win,8,0,"cpu%%           %3.2f",dcpupct);
+    mvwprintw(win,9,0,"%% per cpu      %3.2f",dcpuusage);
 
     wattron(win,A_REVERSE);
     mvwprintw(win,10,0,"      Storage       ");
