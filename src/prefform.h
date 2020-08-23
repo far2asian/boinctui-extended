@@ -28,13 +28,13 @@ class PrefForm : public NForm
 {
   public:
     PrefForm(int lines, int rows, Srv* srv, const char* mgrname);
-    void genfields(int& line, Item* mgr); // Create an array of fields
+    void genfields(int& line); // Create an array of fields
     virtual void eventhandle(NEvent* ev); // Event handler
   protected:
+    int         max_ncpus_pct_field;
+    int         cpu_usage_limit_field;
     int         namefield;
-    int         passwfield;
     int         errmsgfield;
-    int         usernamefield;
     int         urlfield;
     Srv*        srv;
     std::string mgrname; // Manager name

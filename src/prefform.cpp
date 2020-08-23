@@ -22,20 +22,14 @@
 #include "tuievent.h"
 
 
-char* strlowcase(char* s); // To lower case
-
-
 PrefForm::PrefForm(int rows, int cols,  Srv* srv, const char* mgrname) : NForm(rows,cols)
 {
     this->srv = srv;
-    settitle(mgrname);
     this->mgrname = mgrname;
-    Item* account_manager = NULL;
-    if (srv !=NULL)
-	account_manager = srv->findaccountmanager(mgrname);
+    settitle("Activity Preferences");
     // Margins
     int row = 0;
-    genfields(row,account_manager);
+    genfields(row);
     // Recalculate the height of the form, so that all the fields look right
     int r,c =0;
     scale_form(frm, &r, &c);
@@ -49,7 +43,7 @@ PrefForm::PrefForm(int rows, int cols,  Srv* srv, const char* mgrname) : NForm(r
 }
 
 
-void PrefForm::genfields(int& line, Item* mgr) //создаст массив полей
+void PrefForm::genfields(int& line) //создаст массив полей
 {
     FIELD* f;
     delfields();
@@ -60,105 +54,36 @@ void PrefForm::genfields(int& line, Item* mgr) //создаст массив п�
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD);
     field_opts_off(f, O_ACTIVE); // Static text
     field_opts_off(f, O_VISIBLE); // Default is invisible
-    // Get the url and the name of the manager (either from the config or from the boinc client)
-    if (mgr != NULL)
-    {
-        Item* url = mgr->findItem("url");
-        if (url !=NULL)
-	    mgrurl = url->getsvalue();
-    }
-    else
-    {
-        // Take the url from the config (if any)
-	Item* boinctui_cfg = gCfg->getcfgptr();
-	if (boinctui_cfg != NULL)
-	{
-	    std::vector<Item*> mgrlist = boinctui_cfg->getItems("accmgr");
-	    std::vector<Item*>::iterator it;
-	    for (it = mgrlist.begin(); it != mgrlist.end(); it++)
-	    {
-		Item* name = (*it)->findItem("name");
-		if (name != NULL)
-		    if (name->getsvalue() == mgrname)
-		    {
-			Item* url = (*it)->findItem("url");
-			if (url != NULL)
-			{
-			    mgrurl = url->getsvalue();
-			    break;
-			}
-		    }
-	    }
-	}
-    }
-    // Manager name
-    f = addfield(new_field(1, getwidth()-4, line, 2, 0, 0));
-    set_field_buffer(f, 0, "Description  ");
+    // Get the % of the cpus
+    f = addfield(new_field(1, 25, line, 2 , 0, 0));
+    set_field_buffer(f, 0, "% of the cpus");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
     field_opts_off(f, O_ACTIVE); // Static text
-    namefield = getfieldcount();
-    f = addfield(new_field(1, 40, line++, 15, 0, 0));
-    if (mgr != NULL)
-    {
-	field_opts_off(f, O_STATIC);
-	field_opts_off(f, O_ACTIVE); // Static text
-    }
-    else
-	set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+    max_ncpus_pct_field = getfieldcount();
+    f = addfield(new_field(1, 30, line++, 25, 0, 0));
     field_opts_off(f, O_AUTOSKIP);
-    set_max_field(f,128); // Max width 128
+    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
     char buf[129];
-    strncpy(buf, gettitle(), 128);
+    strncpy(buf, srv->statedom.hookptr()->findItem("max_ncpus_pct")->getsvalue(), 128);
     buf[128] = '\0';
     char* p;
     p = ltrim(buf);
     rtrim(buf);
     set_field_buffer(f, 0, p);
-    // url
+    // Get the % of the cpu time
     line++;
-    f = addfield(new_field(1, getwidth()-4, line, 2, 0, 0));
-    set_field_buffer(f, 0, "URL          ");
+    f = addfield(new_field(1, 25, line, 2 , 0, 0));
+    set_field_buffer(f, 0, "% of cpu time");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
     field_opts_off(f, O_ACTIVE); // Static text
-    urlfield = getfieldcount();
-    f = addfield(new_field(1, 40, line++, 15, 0, 0));
-    if (mgr != NULL)
-    {
-	field_opts_off(f, O_STATIC);
-	field_opts_off(f, O_ACTIVE); // Static text
-    }
-    else
-	set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-    field_opts_off(f, O_AUTOSKIP);
-    set_max_field(f,128); // Max width 128
-    set_field_buffer(f, 0, mgrurl.c_str());
-    // Help text
-    line++;
-    f = addfield(new_field(3, getwidth()-4, line++, 2, 0, 0));
-    set_field_buffer(f, 0,  "If you have not yet registered with this account manager" \
-    			"     please do so before proceeding.");
-    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); // Static text
-    line = line + 2;
-    // User name
-    line++;
-    f = addfield(new_field(1, 10, line, 2 , 0, 0));
-    set_field_buffer(f, 0, "username");
-    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); // Static text
-    usernamefield = getfieldcount();
-    f = addfield(new_field(1, 40, line++, 15, 0, 0));
-    field_opts_off(f, O_AUTOSKIP);
+    cpu_usage_limit_field = getfieldcount();
+    f = addfield(new_field(1, 30, line++, 25, 0, 0));
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-    // Password
-    line++;
-    f = addfield(new_field(1, 10, line, 2 , 0, 0));
-    set_field_buffer(f, 0, "password");
-    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); // Static text
-    passwfield = getfieldcount();
-    f = addfield(new_field(1, 40, line++, 15, 0, 0));
-    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+    strncpy(buf, srv->statedom.hookptr()->findItem("cpu_usage_limit")->getsvalue(), 128);
+    buf[128] = '\0';
+    p = ltrim(buf);
+    rtrim(buf);
+    set_field_buffer(f, 0, p);
     field_opts_off(f, O_AUTOSKIP);
     // Control keys
     line++;
@@ -188,16 +113,17 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
 	    case KEY_ENTER:
 	    case '\n': // ENTER
 	    {
+		break;
 		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
-		char* username = rtrim(field_buffer(fields[usernamefield],0));
-		char* passw = rtrim(field_buffer(fields[passwfield],0));
+		char* max_ncpus_pct = rtrim(field_buffer(fields[max_ncpus_pct_field],0));
+		char* cpu_usage_limit = rtrim(field_buffer(fields[cpu_usage_limit_field],0));
 		mgrurl = rtrim(field_buffer(fields[urlfield],0));
 		char* mgrname = rtrim(field_buffer(fields[namefield],0));
-		kLogPrintf("PrefForm OK username=[%s] passw=[%s]\n", username, passw);
+		kLogPrintf("PrefForm OK max_ncpus_pct=[%s] cpu_usage_limit=[%s]\n", max_ncpus_pct, cpu_usage_limit);
 		if (srv!=NULL)
 		{
 		    std::string errmsg;
-		    bool success = srv->accountmanager(mgrurl.c_str(), username, passw, false, errmsg);
+		    bool success = srv->accountmanager(mgrurl.c_str(), max_ncpus_pct, cpu_usage_limit, false, errmsg);
 		    if (success)
 		    {
 			Item* account_manager = NULL;
