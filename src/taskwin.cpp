@@ -487,7 +487,21 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr2," %6s", "?");
 		}
-		//колонка 5 время дедлайн
+		//колонка 5 received time column
+		if(iscolvisible(column++))
+		{
+		    Item* received_time = (*it)->findItem("received_time");
+		    int attr2 = attr;
+		    if (received_time != NULL)
+		    {
+			double dtime = received_time->getdvalue();
+			double beforedl = time(NULL) - dtime; //число секунд до дедлайна
+			cs->append(attr2," %6s", gethumanreadabletimestr(beforedl).c_str());
+		    }
+		    else
+			cs->append(attr," %6s", "?");
+		}
+		//колонка 6 время дедлайн
 		if(iscolvisible(column++))
 		{
 		    Item* report_deadline = (*it)->findItem("report_deadline");
@@ -503,7 +517,7 @@ void TaskWin::updatedata() //обновить данные с сервера
 		    else
 			cs->append(attr2," %6s", "?");
 		}
-		//колонка 6 имя приложения
+		//колонка 7 имя приложения
 		if(iscolvisible(column++))
 		{
 		    char buf[256];
@@ -523,9 +537,32 @@ void TaskWin::updatedata() //обновить данные с сервера
 			mbstrtrunc(buf,30);
 		    cs->append(attr,"  %-30s", buf);
 		}
-		//колонка 7 имя задачи
+		//колонка 8 swap size
 		if(iscolvisible(column++))
-		    cs->append(attr,"  %s", name->getsvalue()); 
+		{
+		    Item* swap_size = (*it)->findItem("swap_size");
+		    int attr2 = attr;
+		    if (swap_size != NULL)
+		    {
+			double d = swap_size->getdvalue()/(1024*1024);
+			char buf[64];
+			if (d <= 1024)
+			{
+			    snprintf(buf, sizeof(buf),"%.1f%s", d,"MB");
+			}
+			else
+			{
+			    d /= 1024;
+			    snprintf(buf, sizeof(buf),"%.3f%s", d,"GB");
+			}
+			cs->append(attr2," %6s", buf);
+		    }
+		    else
+			cs->append(attr," %6s ", " - ");
+		}
+		//колонка 9 имя задачи
+		if(iscolvisible(column++))
+		    cs->append(attr,"   %s", name->getsvalue());
 		//добавляем сформированную строку и поле данных с именем задачи (для селектора)
 		//addstring(strdup(name->getsvalue()),cs);
 		addstring(new TaskInfo(name->getsvalue(),(*it)->findItem("project_url")->getsvalue()), cs);

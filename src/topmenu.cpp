@@ -41,13 +41,15 @@
 #define M_VIEW_DONE			"Percent done column"
 #define M_VIEW_PROJECT			"Project name column"
 #define M_VIEW_ESTIMATE			"Estimate time column"
+#define M_VIEW_RECEIVED			"Received time column"
 #define M_VIEW_DEADLINE			"Deadline time column"
 #define M_VIEW_APPNAME			"Application name column"
+#define M_VIEW_SWAPSIZE			"Swap size column"
 #define M_VIEW_TASKNAME			"Task name column"
 #define M_ALL_TASKS			"All tasks"
 #define M_HIDE_DONE			"Hide done tasks"
 #define M_ACTIVE_ONLY			"Active tasks only"
-#define M_UNSORTED			"Unsorted tasks list"
+#define M_SORT_BY_REC			"Sort by received time"
 #define M_SORT_BY_STATE			"Sort by state"
 #define M_SORT_BY_DONE			"Sort by done %"
 #define M_SORT_BY_PROJECT		"Sort by project name"
@@ -270,8 +272,10 @@ ViewSubMenu::ViewSubMenu(NRect rect/*, Config* cfg*/) : NMenu(rect)
     additem(M_VIEW_DONE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_PROJECT, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_ESTIMATE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
+    additem(M_VIEW_RECEIVED, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_DEADLINE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_APPNAME, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
+    additem(M_VIEW_SWAPSIZE, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem(M_VIEW_TASKNAME, iscolenable(/*cfg,*/colnum++) ? "[*]" : "[ ]");
     additem("","");
     int taskslistmode = 0;
@@ -298,7 +302,7 @@ ViewSubMenu::ViewSubMenu(NRect rect/*, Config* cfg*/) : NMenu(rect)
 	    taskssortmode = tasks_sort_mode->getivalue();
 	}
     }
-    additem(M_UNSORTED,         (taskssortmode == 0) ? "(*)" : "( )");
+    additem(M_SORT_BY_REC,      (taskssortmode == 0) ? "(*)" : "( )");
     additem(M_SORT_BY_STATE,    (taskssortmode == 1) ? "(*)" : "( )");
     additem(M_SORT_BY_DONE,     (taskssortmode == 2) ? "(*)" : "( )");
     additem(M_SORT_BY_PROJECT,  (taskssortmode == 3) ? "(*)" : "( )");
@@ -352,7 +356,7 @@ bool ViewSubMenu::action()
 	return true;
     }
 
-    if ( strcmp(item_name(current_item(menu)), M_UNSORTED) == 0 )
+    if ( strcmp(item_name(current_item(menu)), M_SORT_BY_REC) == 0 )
     {
 	putevent(new TuiEvent(evSORTMODECH, 0));
 	return true;
