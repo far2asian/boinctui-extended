@@ -645,30 +645,17 @@ bool Srv::projectattach(const char* url, const char* prjname, const char* email,
     return result;
 }
 
-bool Srv::prefupdate(const char* url, const char* prjname, const char* email, const char* pass, std::string& errmsg) //подключить проект
+bool Srv::prefupdate(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg) //подключить аккаунт менеджер
 {
-    //расчитать хэш md5 от pass+email
-    unsigned char md5digest[MD5_DIGEST_LENGTH];
-    MD5_CTX c;
-    MD5_Init(&c);
-    MD5_Update(&c, pass , strlen(pass));
-    MD5_Update(&c, email, strlen(email));
-    MD5_Final(md5digest,&c);
-    char shash[1024]; //строковое представление хэша
-    for (int i=0;i<MD5_DIGEST_LENGTH;i++)
-	sprintf(shash+i*2,"%02x",md5digest[i]);
-    //формируем запрос для получения authenticator
     char sreq[1024];
-    snprintf(sreq,sizeof(sreq),"<lookup_account>\n<url>%s</url>\n<email_addr>%s</email_addr>\n<passwd_hash>%s</passwd_hash>\n</lookup_account>\n",url,email,shash);
+    snprintf(sreq,sizeof(sreq),"<set_global_prefs_override>\n<global_preferences>\n<name>%s</name>\n<password>%s</password>\n</global_preferences>\n</set_global_prefs_override>\n",username,pass);
     Item* res = req(sreq);
     if (res == NULL)
 	return false;
     kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
-    free(res);
-    int count = 30; //не больше 30 запросов
-    snprintf(sreq,sizeof(sreq),"<lookup_account_poll/>");
-    std::string sauthenticator;
+    //ждем завершения
     bool done = false;
+    int count = 30; //не больше 30 запросов
     do
     {
 	res = req(sreq);
@@ -676,36 +663,30 @@ bool Srv::prefupdate(const char* url, const char* prjname, const char* email, co
 	    return false;
 	kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
 	Item* error_num = res->findItem("error_num");
-	if ((error_num != NULL)&&(error_num->getivalue() != ERR_IN_PROGRESS))
+	if (error_num != NULL)
 	{
-	    Item* error_msg = res->findItem("error_msg");
-	    if (error_msg != NULL)
-		errmsg = error_msg->getsvalue(); //возврат строки ошибки
-	    return false;
-	}
-	Item* authenticator  = res->findItem("authenticator");
-	if (authenticator != NULL)
-	{
-	    sauthenticator = authenticator->getsvalue();
-	    done = true;
+	    int errnum = error_num->getivalue();
+	    if (errnum == BOINC_SUCCESS) //успешно
+		done = true;
+	    else
+		if (errnum != ERR_IN_PROGRESS) //ошибка выходим
+		{
+		    Item* message = res->findItem("message");
+		    if (message != NULL)
+			errmsg = message->getsvalue(); //возврат строки ошибк
+		    free(res);
+		    return false;
+		}
+		else
+		    sleep(1); //ERR_IN_PROGRESS ждем 1 сек
 	}
 	free(res);
-	sleep(1); //ждем 1 сек
     }
     while((count--)&&(!done));
-    if (!done)
-	return false;
-    //формируем запрос для подключения к проекту
-    snprintf(sreq,sizeof(sreq),"<project_attach>\n<project_url>%s</project_url>\n<authenticator>%s</authenticator>\n<project_name>%s</project_name>\n</project_attach>\n",url,sauthenticator.c_str(),prjname);
-    res = req(sreq);
-    if (res == NULL)
-	return false;
-    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
-    bool result = (res->findItem("success") != NULL);
-    free(res);
-    return result;
+    sleep(1); //даем треду 1 сек на обновление
+    kLogPrintf("RET %b\n",done);
+    return done;
 }
-
 
 bool Srv::accountmanager(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg) //подключить аккаунт менеджер
 {

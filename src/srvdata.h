@@ -75,9 +75,9 @@ class Srv : public TConnect //описание соединения с серв�
     void  optask(const char* url, const char* name, const char* op); //действия над задачей ("suspend_result",...)
     void  opproject(const char* name, const char* op); //действия над проектом ("project_suspend","project_resume",...)
     void  runbenchmarks(); //запустить бенчмарк
-    bool  prefupdate(const char* url, const char* prjname, const char* email, const char* pass, std::string& errmsg);
     bool  projectattach(const char* url, const char* prjname, const char* email, const char* pass, std::string& errmsg); //подключить проект
     bool  createaccount(const char* url, const char* email, const char* pass, const char* username, const char* teamname, std::string& errmsg); //создать аккаунт
+    bool  prefupdate(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg); //подключить аккаунт менеджер
     bool  accountmanager(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg); //подключить аккаунт менеджер
     bool  getprojectconfig(const char* url, std::string& errmsg); //получить c сервера файл конфигурации
     time_t	getlaststattime(); //вернет время последней имеющейся статистики
