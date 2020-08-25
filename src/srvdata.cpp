@@ -584,8 +584,68 @@ bool Srv::createaccount(const char* url, const char* email, const char* pass, co
     return true;
 }
 
-
 bool Srv::projectattach(const char* url, const char* prjname, const char* email, const char* pass, std::string& errmsg) //подключить проект
+{
+    //расчитать хэш md5 от pass+email
+    unsigned char md5digest[MD5_DIGEST_LENGTH];
+    MD5_CTX c;
+    MD5_Init(&c);
+    MD5_Update(&c, pass , strlen(pass));
+    MD5_Update(&c, email, strlen(email));
+    MD5_Final(md5digest,&c);
+    char shash[1024]; //строковое представление хэша
+    for (int i=0;i<MD5_DIGEST_LENGTH;i++)
+	sprintf(shash+i*2,"%02x",md5digest[i]);
+    //формируем запрос для получения authenticator
+    char sreq[1024];
+    snprintf(sreq,sizeof(sreq),"<lookup_account>\n<url>%s</url>\n<email_addr>%s</email_addr>\n<passwd_hash>%s</passwd_hash>\n</lookup_account>\n",url,email,shash);
+    Item* res = req(sreq);
+    if (res == NULL)
+	return false;
+    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
+    free(res);
+    int count = 30; //не больше 30 запросов
+    snprintf(sreq,sizeof(sreq),"<lookup_account_poll/>");
+    std::string sauthenticator;
+    bool done = false;
+    do
+    {
+	res = req(sreq);
+	if (res == NULL)
+	    return false;
+	kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
+	Item* error_num = res->findItem("error_num");
+	if ((error_num != NULL)&&(error_num->getivalue() != ERR_IN_PROGRESS))
+	{
+	    Item* error_msg = res->findItem("error_msg");
+	    if (error_msg != NULL)
+		errmsg = error_msg->getsvalue(); //возврат строки ошибки
+	    return false;
+	}
+	Item* authenticator  = res->findItem("authenticator");
+	if (authenticator != NULL)
+	{
+	    sauthenticator = authenticator->getsvalue();
+	    done = true;
+	}
+	free(res);
+	sleep(1); //ждем 1 сек
+    }
+    while((count--)&&(!done));
+    if (!done)
+	return false;
+    //формируем запрос для подключения к проекту
+    snprintf(sreq,sizeof(sreq),"<project_attach>\n<project_url>%s</project_url>\n<authenticator>%s</authenticator>\n<project_name>%s</project_name>\n</project_attach>\n",url,sauthenticator.c_str(),prjname);
+    res = req(sreq);
+    if (res == NULL)
+	return false;
+    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
+    bool result = (res->findItem("success") != NULL);
+    free(res);
+    return result;
+}
+
+bool Srv::prefupdate(const char* url, const char* prjname, const char* email, const char* pass, std::string& errmsg) //подключить проект
 {
     //расчитать хэш md5 от pass+email
     unsigned char md5digest[MD5_DIGEST_LENGTH];
