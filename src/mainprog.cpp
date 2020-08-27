@@ -376,11 +376,10 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 	    {
 		if (!destroybyid(typeid(PrefForm).name()))
 		{
-		    TuiEvent* ev1 = (TuiEvent*)ev;
 		    Srv* srv = gsrvlist->getcursrv();
-		    if (ev1->srv != NULL)
+		    if (srv != NULL)
 		    {
-			PrefForm* prefform = new PrefForm(30,65,ev1->srv);
+			PrefForm* prefform = new PrefForm(30,65,srv);
 			insert(prefform);
 			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
 			prefform->settitle("Preferences");

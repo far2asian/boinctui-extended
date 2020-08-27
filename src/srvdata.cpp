@@ -653,39 +653,30 @@ bool Srv::prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std
     if (res == NULL)
 	return false;
     kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
-    //ждем завершения
+    res = req("<read_global_prefs_override/>");
+    if (res == NULL)
+	return false;
+    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
+    /*
+    int count = 0;
     bool done = false;
-    int count = 30; //не больше 30 запросов
     do
     {
-	res = req(sreq);
-	if (res == NULL)
-	    return false;
-	kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
-	Item* error_num = res->findItem("error_num");
-	if (error_num != NULL)
-	{
-	    int errnum = error_num->getivalue();
-	    if (errnum == BOINC_SUCCESS) //успешно
-		done = true;
-	    else
-		if (errnum != ERR_IN_PROGRESS) //ошибка выходим
-		{
-		    Item* message = res->findItem("message");
-		    if (message != NULL)
-			errmsg = message->getsvalue(); //возврат строки ошибк
-		    free(res);
-		    return false;
-		}
-		else
-		    sleep(1); //ERR_IN_PROGRESS ждем 1 сек
-	}
-	free(res);
+        if (statedom.empty())
+	    done = false;
+        Item* tmpstatedom = statedom.hookptr();
+        Item* client_state = tmpstatedom->findItem("client_state");
+
+        if (client_state == NULL)
+	    done = false;
+
+        done = (!strcmp(max_ncpus_pct,client_state->findItem("max_ncpus_pct")->getsvalue()) &&
+		    !strcmp(cpu_usage_limit,client_state->findItem("cpu_usage_limit")->getsvalue()));
+	sleep(1);
     }
     while((count--)&&(!done));
-    sleep(1); //даем треду 1 сек на обновление
-    kLogPrintf("RET %b\n",done);
     return done;
+    */
 }
 
 bool Srv::accountmanager(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg) //подключить аккаунт менеджер
