@@ -501,7 +501,19 @@ void TaskWin::updatedata() //обновить данные с сервера
 			    cs->append(attr2," %6s", "?"); //естимейт отрицательный (BOINC bug?)
 		    }
 		    else
-			cs->append(attr2," %6s", "-");
+		    {
+			Item* final_time = (*it)->findItem("final_elapsed_time");
+			if (final_time != NULL)
+			{
+			    double dtime = final_time->getdvalue();
+			    if ( dtime >= 0)
+			        cs->append(attr2," %6s", gethumanreadabletimestr(dtime).c_str()); //естимейт
+			    else
+			        cs->append(attr2," %6s", "?"); //естимейт отрицательный (BOINC bug?)
+			}
+			else
+			    cs->append(attr2," %6s", "-");
+		    }
 		}
 		//колонка 6 received time column
 		if(iscolvisible(column++))
