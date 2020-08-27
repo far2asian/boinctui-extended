@@ -27,7 +27,7 @@
 class PrefForm : public NForm
 {
   public:
-    PrefForm(int lines, int rows, Srv* srv, const char* mgrname);
+    PrefForm(int lines, int rows, Srv* srv);
     void genfields(int& line); // Create an array of fields
     virtual void eventhandle(NEvent* ev); // Event handler
   protected:

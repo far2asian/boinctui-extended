@@ -645,10 +645,10 @@ bool Srv::projectattach(const char* url, const char* prjname, const char* email,
     return result;
 }
 
-bool Srv::prefupdate(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg) //подключить аккаунт менеджер
+bool Srv::prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std::string& errmsg) //updating certain preferences
 {
     char sreq[1024];
-    snprintf(sreq,sizeof(sreq),"<set_global_prefs_override>\n<global_preferences>\n<name>%s</name>\n<password>%s</password>\n</global_preferences>\n</set_global_prefs_override>\n",username,pass);
+    snprintf(sreq,sizeof(sreq),"<set_global_prefs_override>\n<global_preferences>\n<max_ncpus_pct>%s</max_ncpus_pct>\n<cpu_usage_limit>%s</cpu_usage_limit>\n</global_preferences>\n</set_global_prefs_override>\n",max_ncpus_pct,cpu_usage_limit);
     Item* res = req(sreq);
     if (res == NULL)
 	return false;

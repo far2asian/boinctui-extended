@@ -243,6 +243,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		menu->disable();
 		//деструктим все какие есть модельные окна
 		destroybyid(typeid(CfgForm).name()); //деструктим форму
+		destroybyid(typeid(PrefForm).name()); //деструктим форму
 		destroybyid(typeid(NMessageBox).name()); //деструктим форму
 		if (destroybyid(typeid(StatWin).name())) //деструктим форму
 		    uistate = uistate & ~stUISTATWIN;
@@ -379,7 +380,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		    Srv* srv = gsrvlist->getcursrv();
 		    if (ev1->srv != NULL)
 		    {
-			PrefForm* prefform = new PrefForm(30,65,ev1->srv,ev1->sdata1.c_str());
+			PrefForm* prefform = new PrefForm(30,65,ev1->srv);
 			insert(prefform);
 			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
 			prefform->settitle("Preferences");
