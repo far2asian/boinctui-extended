@@ -657,9 +657,9 @@ bool Srv::prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std
     if (res == NULL)
 	return false;
     kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
-    /*
     int count = 0;
     bool done = false;
+    /*
     do
     {
         if (statedom.empty())
@@ -675,8 +675,8 @@ bool Srv::prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std
 	sleep(1);
     }
     while((count--)&&(!done));
-    return done;
     */
+    return done;
 }
 
 bool Srv::accountmanager(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg) //подключить аккаунт менеджер
