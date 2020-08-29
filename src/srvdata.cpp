@@ -657,26 +657,7 @@ bool Srv::prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std
     if (res == NULL)
 	return false;
     kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
-    int count = 0;
-    bool done = false;
-    /*
-    do
-    {
-        if (statedom.empty())
-	    done = false;
-        Item* tmpstatedom = statedom.hookptr();
-        Item* client_state = tmpstatedom->findItem("client_state");
-
-        if (client_state == NULL)
-	    done = false;
-
-        done = (!strcmp(max_ncpus_pct,client_state->findItem("max_ncpus_pct")->getsvalue()) &&
-		    !strcmp(cpu_usage_limit,client_state->findItem("cpu_usage_limit")->getsvalue()));
-	sleep(1);
-    }
-    while((count--)&&(!done));
-    */
-    return done;
+    return true;
 }
 
 bool Srv::accountmanager(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg) //подключить аккаунт менеджер

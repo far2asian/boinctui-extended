@@ -33,12 +33,8 @@ class PrefForm : public NForm
   protected:
     int         max_ncpus_pct_field;
     int         cpu_usage_limit_field;
-    int         namefield;
     int         errmsgfield;
-    int         urlfield;
     Srv*        srv;
-    std::string mgrname; // Manager name
-    std::string mgrurl; // Manager URL
 
 };
 

@@ -53,6 +53,8 @@ void PrefForm::genfields(int& line) //создаст массив полей
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD);
     field_opts_off(f, O_ACTIVE); // Static text
     field_opts_off(f, O_VISIBLE); // Default is invisible
+    char buf[129];
+    char* p;
     // Get the % of the cpus
     f = addfield(new_field(1, 25, line, 2 , 0, 0));
     set_field_buffer(f, 0, "% of the cpus");
@@ -61,10 +63,8 @@ void PrefForm::genfields(int& line) //создаст массив полей
     max_ncpus_pct_field = getfieldcount();
     f = addfield(new_field(1, 30, line++, 25, 0, 0));
     set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-    char buf[129];
     strncpy(buf, srv->statedom.hookptr()->findItem("max_ncpus_pct")->getsvalue(), 128);
     buf[128] = '\0';
-    char* p;
     p = ltrim(buf);
     rtrim(buf);
     set_field_buffer(f, 0, p);
