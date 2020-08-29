@@ -44,6 +44,38 @@ PrefForm::PrefForm(int rows, int cols,  Srv* srv) : NForm(rows,cols)
 
 void PrefForm::genfields(int& line) //создаст массив полей
 {
+    std::vector<std::string> preferences =
+        {
+            "cpu_usage_limit",
+            "max_ncpus_pct",
+/*            "confirm_before_connecting",
+            "cpu_scheduling_period_minutes",
+            "daily_xfer_limit_mb",
+            "daily_xfer_period_days",
+            "disk_interval",
+            "disk_max_used_gb",
+            "disk_max_used_pct",
+            "disk_min_free_gb",
+            "dont_verify_images",
+            "end_hour",
+            "hangup_if_dialed",
+            "idle_time_to_run",
+            "leave_apps_in_memory",
+            "max_bytes_sec_down",
+            "max_bytes_sec_up",
+            "net_end_hour",
+            "net_start_hour",
+            "ram_max_used_busy_pct",
+            "ram_max_used_idle_pct",
+            "run_gpu_if_user_active",
+            "run_if_user_active",
+            "run_on_batteries",
+            "start_hour",
+            "suspend_cpu_usage",
+            "vm_max_used_pct",
+            "work_buf_additional_days",*/
+            "work_buf_min_days"
+	};
     FIELD* f;
     delfields();
     // Error message
@@ -55,35 +87,22 @@ void PrefForm::genfields(int& line) //создаст массив полей
     field_opts_off(f, O_VISIBLE); // Default is invisible
     char buf[129];
     char* p;
-    // Get the % of the cpus
-    f = addfield(new_field(1, 25, line, 2 , 0, 0));
-    set_field_buffer(f, 0, "% of the cpus");
-    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); // Static text
-    max_ncpus_pct_field = getfieldcount();
-    f = addfield(new_field(1, 30, line++, 25, 0, 0));
-    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-    strncpy(buf, srv->statedom.hookptr()->findItem("max_ncpus_pct")->getsvalue(), 128);
-    buf[128] = '\0';
-    p = ltrim(buf);
-    rtrim(buf);
-    set_field_buffer(f, 0, p);
-    // Get the % of the cpu time
-    line++;
-    f = addfield(new_field(1, 25, line, 2 , 0, 0));
-    set_field_buffer(f, 0, "% of cpu time");
-    set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-    field_opts_off(f, O_ACTIVE); // Static text
-    cpu_usage_limit_field = getfieldcount();
-    f = addfield(new_field(1, 30, line++, 25, 0, 0));
-    set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-    strncpy(buf, srv->statedom.hookptr()->findItem("cpu_usage_limit")->getsvalue(), 128);
-    buf[128] = '\0';
-    p = ltrim(buf);
-    rtrim(buf);
-    set_field_buffer(f, 0, p);
-    // Control keys
-    line++;
+    for (int i = 0; i < preferences.size(); i++)
+    {
+        f = addfield(new_field(1, 25, line, 2 , 0, 0));
+        set_field_buffer(f, 0, preferences[i].c_str());
+        set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+        field_opts_off(f, O_ACTIVE); // Static text
+        max_ncpus_pct_field = getfieldcount();
+        f = addfield(new_field(1, 15, line++, 25, 0, 0));
+        set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+        strncpy(buf, srv->statedom.hookptr()->findItem(preferences[i].c_str())->getsvalue(), 128);
+        buf[128] = '\0';
+        p = ltrim(buf);
+        rtrim(buf);
+        set_field_buffer(f, 0, p);
+        line++;
+    }
     f = addfield(new_field(1, getwidth()-25, line++, 20 , 0, 0));
     set_field_buffer(f, 0, "Enter-Ok    Esc-Cancel");
     set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
