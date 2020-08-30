@@ -44,38 +44,6 @@ PrefForm::PrefForm(int rows, int cols,  Srv* srv) : NForm(rows,cols)
 
 void PrefForm::genfields(int& line) //создаст массив полей
 {
-    std::vector<std::string> preferences =
-        {
-            "cpu_usage_limit",
-            "max_ncpus_pct",
-/*            "confirm_before_connecting",
-            "cpu_scheduling_period_minutes",
-            "daily_xfer_limit_mb",
-            "daily_xfer_period_days",
-            "disk_interval",
-            "disk_max_used_gb",
-            "disk_max_used_pct",
-            "disk_min_free_gb",
-            "dont_verify_images",
-            "end_hour",
-            "hangup_if_dialed",
-            "idle_time_to_run",
-            "leave_apps_in_memory",
-            "max_bytes_sec_down",
-            "max_bytes_sec_up",
-            "net_end_hour",
-            "net_start_hour",
-            "ram_max_used_busy_pct",
-            "ram_max_used_idle_pct",
-            "run_gpu_if_user_active",
-            "run_if_user_active",
-            "run_on_batteries",
-            "start_hour",
-            "suspend_cpu_usage",
-            "vm_max_used_pct",
-            "work_buf_additional_days",*/
-            "work_buf_min_days"
-	};
     FIELD* f;
     delfields();
     // Error message
@@ -87,16 +55,18 @@ void PrefForm::genfields(int& line) //создаст массив полей
     field_opts_off(f, O_VISIBLE); // Default is invisible
     char buf[129];
     char* p;
+    std::string pref_name;
     for (int i = 0; i < preferences.size(); i++)
     {
+	pref_name = preferences[i];
         f = addfield(new_field(1, 25, line, 2 , 0, 0));
         set_field_buffer(f, 0, preferences[i].c_str());
         set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
         field_opts_off(f, O_ACTIVE); // Static text
-        max_ncpus_pct_field = getfieldcount();
+        preference_fields[pref_name] = getfieldcount();
         f = addfield(new_field(1, 15, line++, 25, 0, 0));
         set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-        strncpy(buf, srv->statedom.hookptr()->findItem(preferences[i].c_str())->getsvalue(), 128);
+        strncpy(buf, srv->statedom.hookptr()->findItem(pref_name.c_str())->getsvalue(), 128);
         buf[128] = '\0';
         p = ltrim(buf);
         rtrim(buf);
@@ -130,13 +100,20 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
 	    case '\n': // ENTER
 	    {
 		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
-		char* max_ncpus_pct = rtrim(field_buffer(fields[max_ncpus_pct_field],0));
-		char* cpu_usage_limit = rtrim(field_buffer(fields[cpu_usage_limit_field],0));
-		kLogPrintf("PrefForm OK max_ncpus_pct=[%s] cpu_usage_limit=[%s]\n", max_ncpus_pct, cpu_usage_limit);
+		kLogPrintf("PrefForm OK\n");
+	        for (int i = 0; i < preferences.size(); i++)
+		{
+		    kLogPrintf("%d\n", i);
+		    preference_settings[preferences[i]] = rtrim(field_buffer(fields[preference_fields[preferences[i]]],0));
+		}
+		for(auto& x : preference_settings)
+		{
+		    kLogPrintf("%s=[%s]\n", x.first.c_str(), x.second);
+		}
 		if (srv!=NULL)
 		{
 		    std::string errmsg;
-		    bool success = srv->prefupdate(max_ncpus_pct, cpu_usage_limit, errmsg);
+		    bool success = srv->prefupdate(preference_settings, errmsg);
 		    if (!success)
 		    {
 			// Error message

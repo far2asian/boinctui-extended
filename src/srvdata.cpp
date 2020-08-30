@@ -645,18 +645,23 @@ bool Srv::projectattach(const char* url, const char* prjname, const char* email,
     return result;
 }
 
-bool Srv::prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std::string& errmsg) //updating certain preferences
+bool Srv::prefupdate(std::map<std::string, char *> prefs, std::string& errmsg) //updating certain preferences
 {
-    char sreq[1024];
-    snprintf(sreq,sizeof(sreq),"<set_global_prefs_override>\n<global_preferences>\n<max_ncpus_pct>%s</max_ncpus_pct>\n<cpu_usage_limit>%s</cpu_usage_limit>\n</global_preferences>\n</set_global_prefs_override>\n",max_ncpus_pct,cpu_usage_limit);
-    Item* res = req(sreq);
+    std::string sreq;
+    sreq = "<set_global_prefs_override>\n<global_preferences>\n";
+    for(auto& x : prefs)
+    {
+	sreq += "<" + x.first + ">" + x.second + "</" + x.first + ">\n";
+    }
+    sreq += "</global_preferences>\n</set_global_prefs_override>\n";
+    Item* res = req(sreq.c_str());
     if (res == NULL)
 	return false;
-    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
+    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq.c_str(), res->toxmlstring().c_str());
     res = req("<read_global_prefs_override/>");
     if (res == NULL)
 	return false;
-    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq, res->toxmlstring().c_str());
+    kLogPrintf("request=\n %s\n\n answer=\n%s\n",sreq.c_str(), res->toxmlstring().c_str());
     return true;
 }
 

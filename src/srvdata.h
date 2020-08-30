@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <list>
 #include <pthread.h>
+#include <map>
 #include "net.h"
 #include "resultdom.h"
 #include "cfg.h"
@@ -77,7 +78,7 @@ class Srv : public TConnect //описание соединения с серв�
     void  runbenchmarks(); //запустить бенчмарк
     bool  projectattach(const char* url, const char* prjname, const char* email, const char* pass, std::string& errmsg); //подключить проект
     bool  createaccount(const char* url, const char* email, const char* pass, const char* username, const char* teamname, std::string& errmsg); //создать аккаунт
-    bool  prefupdate(const char* max_ncpus_pct, const char* cpu_usage_limit, std::string& errmsg); //update certain preferences
+    bool  prefupdate(std::map<std::string, char *>, std::string& errmsg); //update certain preferences
     bool  accountmanager(const char* url, const char* username, const char* pass, bool useconfigfile, std::string& errmsg); //подключить аккаунт менеджер
     bool  getprojectconfig(const char* url, std::string& errmsg); //получить c сервера файл конфигурации
     time_t	getlaststattime(); //вернет время последней имеющейся статистики

@@ -20,6 +20,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <map>
 #include "nform.h"
 #include "nstatictext.h"
 #include "srvdata.h"
@@ -31,11 +32,42 @@ class PrefForm : public NForm
     void genfields(int& line); // Create an array of fields
     virtual void eventhandle(NEvent* ev); // Event handler
   protected:
-    int         max_ncpus_pct_field;
-    int         cpu_usage_limit_field;
     int         errmsgfield;
     Srv*        srv;
-
+    std::vector<std::string> preferences =
+    {
+        "cpu_usage_limit",
+        "max_ncpus_pct",
+//        "confirm_before_connecting",
+//        "cpu_scheduling_period_minutes",
+//        "daily_xfer_limit_mb",
+//        "daily_xfer_period_days",
+//        "disk_interval",
+//        "disk_max_used_gb",
+//        "disk_max_used_pct",
+//        "disk_min_free_gb",
+//        "dont_verify_images",
+//        "end_hour",
+//        "hangup_if_dialed",
+//        "idle_time_to_run",
+//        "leave_apps_in_memory",
+//        "max_bytes_sec_down",
+//        "max_bytes_sec_up",
+//        "net_end_hour",
+//        "net_start_hour",
+//        "ram_max_used_busy_pct",
+//        "ram_max_used_idle_pct",
+//        "run_gpu_if_user_active",
+//        "run_if_user_active",
+//        "run_on_batteries",
+//        "start_hour",
+//        "suspend_cpu_usage",
+//        "vm_max_used_pct",
+//        "work_buf_additional_days",
+        "work_buf_min_days"
+    };
+    std::map<std::string, int> preference_fields;
+    std::map<std::string, char *> preference_settings;
 };
 
 
