@@ -576,7 +576,12 @@ void TaskWin::updatedata() //обновить данные с сервера
 			char buf[64];
 			if (d <= 1024)
 			{
-			    snprintf(buf, sizeof(buf),"%.1f%s", d,"MB");
+			    if (d < 100)
+			        snprintf(buf, sizeof(buf)," %.1f%s", d,"MB");
+			    else if (d >= 1000)
+			        snprintf(buf, sizeof(buf),"%4f%s", d,"MB");
+			    else
+			        snprintf(buf, sizeof(buf),"%.1f%s", d,"MB");
 			}
 			else
 			{
