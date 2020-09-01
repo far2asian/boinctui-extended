@@ -56,15 +56,33 @@ void PrefForm::genfields(int& line) //создаст массив полей
     char buf[129];
     char* p;
     std::string pref_name;
-    for (int i = 0; i < preferences.size(); i++)
+    for (int i = 0; i < preferences.size(); i+=2)
     {
-	pref_name = preferences[i];
-        f = addfield(new_field(1, 25, line, 2 , 0, 0));
+        pref_name = preferences[i];
+        f = addfield(new_field(1, 20, line, 2 , 0, 0));
         set_field_buffer(f, 0, preferences[i].c_str());
         set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
         field_opts_off(f, O_ACTIVE); // Static text
         preference_fields[pref_name] = getfieldcount();
-        f = addfield(new_field(1, 15, line++, 25, 0, 0));
+        f = addfield(new_field(1, 15, line, 18, 0, 0));
+        set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
+        strncpy(buf, srv->statedom.hookptr()->findItem(pref_name.c_str())->getsvalue(), 128);
+        buf[128] = '\0';
+        p = ltrim(buf);
+        rtrim(buf);
+        set_field_buffer(f, 0, p);
+	if ((i + 1) == preferences.size())
+	{
+	    line++;
+	    break;
+	}
+	pref_name = preferences[i+1];
+        f = addfield(new_field(1, 20, line, 35 , 0, 0));
+        set_field_buffer(f, 0, preferences[i+1].c_str());
+        set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
+        field_opts_off(f, O_ACTIVE); // Static text
+        preference_fields[pref_name] = getfieldcount();
+        f = addfield(new_field(1, 15, line++, 50, 0, 0));
         set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
         strncpy(buf, srv->statedom.hookptr()->findItem(pref_name.c_str())->getsvalue(), 128);
         buf[128] = '\0';
