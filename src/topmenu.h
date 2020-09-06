@@ -135,6 +135,16 @@ class ActivitySubMenu : public NMenu //выпадающие меню второ�
     Srv*	srv; //текущий отображаемый сервер
 };
 
+class PreferencesSubMenu : public NMenu //выпадающие меню второго уровня Список ВСЕХ проектов
+{
+  public:
+    PreferencesSubMenu(NRect rect, Srv* srv);
+    virtual void eventhandle(NEvent* ev); 	//обработчик событий
+  protected:
+    virtual bool action(); //вызывается при нажатии Enter
+    Srv*	srv; //текущий отображаемый сервер
+};
+
 class HelpSubMenu : public NMenu //выпадающие меню "Help"
 {
   public:
