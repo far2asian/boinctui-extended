@@ -34,11 +34,17 @@ class PrefForm : public NForm
   protected:
     int         errmsgfield;
     Srv*        srv;
-    std::string title;
-    std::vector<std::string> preferences =
+    std::string type;
+    std::vector<std::string> computing_preferences =
     {
         "cpu_usage_limit",
         "max_ncpus_pct",
+        "run_gpu_if_user_active",
+        "run_if_user_active",
+        "run_on_batteries"
+    };
+    std::vector<std::string> preferences_other =
+    {
         "confirm_before_connecting",
         "cpu_scheduling_period_minutes",
         "daily_xfer_limit_mb",
@@ -58,9 +64,6 @@ class PrefForm : public NForm
         "net_start_hour",
         "ram_max_used_busy_pct",
         "ram_max_used_idle_pct",
-        "run_gpu_if_user_active",
-        "run_if_user_active",
-        "run_on_batteries",
         "start_hour",
         "suspend_cpu_usage",
         "vm_max_used_pct",

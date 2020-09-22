@@ -379,7 +379,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		    Srv* srv = gsrvlist->getcursrv();
 		    if (srv != NULL)
 		    {
-			std::string title = "Computer";
+			std::string title = "Computing";
 			PrefForm* prefform = new PrefForm(30,65,srv, title);
 			insert(prefform);
 			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
@@ -417,7 +417,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		    Srv* srv = gsrvlist->getcursrv();
 		    if (srv != NULL)
 		    {
-			std::string title = "Disk and memory";
+			std::string title = "Disk and Memory";
 			PrefForm* prefform = new PrefForm(30,65,srv, title);
 			insert(prefform);
 			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем

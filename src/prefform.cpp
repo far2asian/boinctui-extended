@@ -25,8 +25,9 @@
 PrefForm::PrefForm(int rows, int cols,  Srv* srv, std::string t) : NForm(rows,cols)
 {
     this->srv = srv;
-    this->title = t + " Preferences";
-    settitle(this->title.c_str());
+    this->type = t;
+    std::string title = t + " Preferences";
+    settitle(title.c_str());
     // Margins
     int row = 0;
     genfields(row);
@@ -57,6 +58,9 @@ void PrefForm::genfields(int& line) //создаст массив полей
     char buf[129];
     char* p;
     std::string pref_name;
+    std::vector<std::string> preferences = preferences_other;
+    if (type == "Computing")
+	preferences = computing_preferences;
     for (int i = 0; i < preferences.size(); i+=2)
     {
         pref_name = preferences[i];
@@ -120,6 +124,9 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
 	    {
 		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
 		kLogPrintf("PrefForm OK\n");
+		std::vector<std::string> preferences = preferences_other;
+		if (type == "Computing")
+		    preferences = computing_preferences;
 	        for (int i = 0; i < preferences.size(); i++)
 		{
 		    kLogPrintf("%d\n", i);
