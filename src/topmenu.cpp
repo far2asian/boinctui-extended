@@ -91,11 +91,10 @@
 #define M_NET_ACTIVITY_ALWAYS		"Network activity always available"
 #define M_NET_ACTIVITY_AUTO		"Network activity based on preferences"
 #define M_NET_ACTIVITY_NEVER		"Network activity suspend"
-#define M_ACTIVITY_PREF			"Activity Preferences"
-#define M_COMPUTING_PREF		"Computing"
-#define M_NETWORK_PREF			"Network"
-#define M_DISKMEM_PREF			"Disk and memory"
-#define M_DAILYSCH_PREF			"Daily Schedules"
+#define M_COMPUTING_PREF		"Computing Preferences"
+#define M_NETWORK_PREF			"Network Preferences"
+#define M_DISKMEM_PREF			"Disk and memory Preferences"
+#define M_DAILYSCH_PREF			"Daily Schedule Preferences"
 //Названия пунктов меню "Help"
 #define M_ABOUT				"About"
 #define M_KEY_BINDINGS			"Hot keys list"
@@ -610,7 +609,7 @@ bool TasksSubMenu::action()
 
 ActivitySubMenu::ActivitySubMenu(NRect rect, Srv* srv) : NMenu(rect)
 {
-//    unpost_menu(menu);
+    unpost_menu(menu);
     this->srv = srv;
     if ((srv != NULL)&&(!srv->ccstatusdom.empty()))
     {
@@ -620,7 +619,7 @@ ActivitySubMenu::ActivitySubMenu(NRect rect, Srv* srv) : NMenu(rect)
 	additem(M_ACTIVITY_AUTO,((task_mode!=NULL)&&(task_mode->getivalue() == 2)) ? "(*)" : "( )"); 	//2 pref
 	additem(M_ACTIVITY_NEVER,((task_mode!=NULL)&&(task_mode->getivalue() == 3)) ? "(*)" : "( )"); 	//3 never
 	additem("",""); //delimiter
-	additem(M_ACTIVITY_PREF,"");
+	additem(M_COMPUTING_PREF,"");
 	if (!srv->statedom.empty())
 	{
 	    Item* tmpstatedom = srv->statedom.hookptr();
@@ -649,9 +648,7 @@ ActivitySubMenu::ActivitySubMenu(NRect rect, Srv* srv) : NMenu(rect)
 
 bool ActivitySubMenu::action()
 {
-//    putevent(new NEvent(NEvent::evKB, KEY_F(9))); //закрыть все меню
-    int begincol = 2;
-    int beginrow = 2 + item_index(current_item(menu));
+    putevent(new NEvent(NEvent::evKB, KEY_F(9))); //закрыть все меню
     if (srv != NULL)
     {
 	if ( strcmp(item_name(current_item(menu)),M_ACTIVITY_ALWAYS) == 0 )
@@ -660,8 +657,8 @@ bool ActivitySubMenu::action()
 	    srv->opactivity("auto");
 	if ( strcmp(item_name(current_item(menu)),M_ACTIVITY_NEVER) == 0 )
 	    srv->opactivity("never");
-	if ( strcmp(item_name(current_item(menu)),M_ACTIVITY_PREF) == 0 )
-	    insert(new PreferencesSubMenu(NRect(5,25,beginrow,begincol), srv));
+	if ( strcmp(item_name(current_item(menu)),M_COMPUTING_PREF) == 0 )
+	    putevent(new TuiEvent(evCOMPREF, srv, item_name(current_item(menu))));
 	if ( strcmp(item_name(current_item(menu)),M_GPU_ACTIVITY_ALWAYS) == 0 )
 	    srv->opgpuactivity("always");
 	if ( strcmp(item_name(current_item(menu)),M_GPU_ACTIVITY_AUTO) == 0 )
@@ -676,63 +673,6 @@ bool ActivitySubMenu::action()
 	    srv->opnetactivity("never");
     }
     return true;
-}
-
-//=============================================================================================
-
-PreferencesSubMenu::PreferencesSubMenu(NRect rect, Srv* srv) : NMenu(rect)
-{
-    this->srv = srv;
-    if (srv != NULL)
-    {
-	additem(M_COMPUTING_PREF,"");
-	additem(M_NETWORK_PREF, "");
-	additem(M_DISKMEM_PREF, "");
-	additem(M_DAILYSCH_PREF, "");
-    }
-    additem(NULL,NULL);
-}
-
-
-bool PreferencesSubMenu::action()
-{
-    if (srv != NULL)
-    {
-	putevent(new TuiEvent(evACTPREF, srv, item_name(current_item(menu))));
-    }
-    return true;
-}
-
-
-void PreferencesSubMenu::eventhandle(NEvent* ev) 	//обработчик событий
-{
-    if ( ev->done )
-	return;
-    NMenu::eventhandle(ev); //предок
-    if ( ev->done )
-	return;
-    if ( ev->type == NEvent::evKB )
-    {
-	ev->done = true;
-        switch(ev->keycode)
-	{
-	    case KEY_RIGHT: //блокируем стрелку вправо
-		break;
-	    case KEY_LEFT:
-		putevent(new NEvent(NEvent::evKB, 27)); //закрыть это подменю
-		break;
-	    case 27:
-		if ( items.size() > 1 ) //1 из-за кроллбара
-		    destroysubmenu();
-		else
-		    ev->done = false; //пусть обрабатывает владелец
-		break;
-	    default:
-		ev->done = false; //нет реакции на этот код
-	} //switch
-	if (ev->done) //если обработали, то нужно перерисоваться
-	    refresh();
-    }
 }
 
 

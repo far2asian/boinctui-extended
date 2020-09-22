@@ -372,7 +372,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		updatestatuslinecontent();
 		break;
 	    }
-	    case evACTPREF:
+	    case evCOMPREF:
 	    {
 		if (!destroybyid(typeid(PrefForm).name()))
 		{

@@ -25,7 +25,7 @@
 PrefForm::PrefForm(int rows, int cols,  Srv* srv) : NForm(rows,cols)
 {
     this->srv = srv;
-    settitle("Activity Preferences");
+    settitle("Computing Preferences");
     // Margins
     int row = 0;
     genfields(row);
@@ -141,7 +141,7 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
 			break;
 		    }
 		}
-		putevent(new TuiEvent(evACTPREF));
+		putevent(new TuiEvent(evCOMPREF));
 		break;
 	    }
 	    case 27:
