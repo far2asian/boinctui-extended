@@ -35,6 +35,9 @@ enum TuiEventType
     evSORTMODECH,	// Switch view mode - 0-unsorted 1-state e.t.c.
     evADDACCMGR,	// Add account manager form
     evCOMPREF,		// Computer preferences form
+    evNETPREF,		// Network preferences form
+    evDISKPREF,		// Disk memory preferences form
+    evDAILYPREF,	// Daily Schedule preferences form
     evPROJECTOP,	// Project operations
     evTASKINFO,		//генерируется когда нужно открыть окно детальной информации о задаче
     evTASKSELECTORON,	// Triggers when the task becomes visible

@@ -379,10 +379,67 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		    Srv* srv = gsrvlist->getcursrv();
 		    if (srv != NULL)
 		    {
-			PrefForm* prefform = new PrefForm(30,65,srv);
+			std::string title = "Computer";
+			PrefForm* prefform = new PrefForm(30,65,srv, title);
 			insert(prefform);
 			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
-			prefform->settitle("Preferences");
+			uistate = uistate | stUIMODALFORM;
+		    }
+		}
+		else
+		    uistate = uistate & ~stUIMODALFORM;
+		updatestatuslinecontent();
+		break;
+	    }
+	    case evNETPREF:
+	    {
+		if (!destroybyid(typeid(PrefForm).name()))
+		{
+		    Srv* srv = gsrvlist->getcursrv();
+		    if (srv != NULL)
+		    {
+			std::string title = "Network";
+			PrefForm* prefform = new PrefForm(30,65,srv, title);
+			insert(prefform);
+			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
+			uistate = uistate | stUIMODALFORM;
+		    }
+		}
+		else
+		    uistate = uistate & ~stUIMODALFORM;
+		updatestatuslinecontent();
+		break;
+	    }
+	    case evDISKPREF:
+	    {
+		if (!destroybyid(typeid(PrefForm).name()))
+		{
+		    Srv* srv = gsrvlist->getcursrv();
+		    if (srv != NULL)
+		    {
+			std::string title = "Disk and memory";
+			PrefForm* prefform = new PrefForm(30,65,srv, title);
+			insert(prefform);
+			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
+			uistate = uistate | stUIMODALFORM;
+		    }
+		}
+		else
+		    uistate = uistate & ~stUIMODALFORM;
+		updatestatuslinecontent();
+		break;
+	    }
+	    case evDAILYPREF:
+	    {
+		if (!destroybyid(typeid(PrefForm).name()))
+		{
+		    Srv* srv = gsrvlist->getcursrv();
+		    if (srv != NULL)
+		    {
+			std::string title = "Daily";
+			PrefForm* prefform = new PrefForm(30,65,srv, title);
+			insert(prefform);
+			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем
 			uistate = uistate | stUIMODALFORM;
 		    }
 		}

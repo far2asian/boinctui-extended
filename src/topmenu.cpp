@@ -620,6 +620,9 @@ ActivitySubMenu::ActivitySubMenu(NRect rect, Srv* srv) : NMenu(rect)
 	additem(M_ACTIVITY_NEVER,((task_mode!=NULL)&&(task_mode->getivalue() == 3)) ? "(*)" : "( )"); 	//3 never
 	additem("",""); //delimiter
 	additem(M_COMPUTING_PREF,"");
+	additem(M_NETWORK_PREF,"");
+	additem(M_DISKMEM_PREF,"");
+	additem(M_DAILYSCH_PREF,"");
 	if (!srv->statedom.empty())
 	{
 	    Item* tmpstatedom = srv->statedom.hookptr();
@@ -659,6 +662,12 @@ bool ActivitySubMenu::action()
 	    srv->opactivity("never");
 	if ( strcmp(item_name(current_item(menu)),M_COMPUTING_PREF) == 0 )
 	    putevent(new TuiEvent(evCOMPREF, srv, item_name(current_item(menu))));
+	if ( strcmp(item_name(current_item(menu)),M_NETWORK_PREF) == 0 )
+	    putevent(new TuiEvent(evNETPREF, srv, item_name(current_item(menu))));
+	if ( strcmp(item_name(current_item(menu)),M_DISKMEM_PREF) == 0 )
+	    putevent(new TuiEvent(evDISKPREF, srv, item_name(current_item(menu))));
+	if ( strcmp(item_name(current_item(menu)),M_DAILYSCH_PREF) == 0 )
+	    putevent(new TuiEvent(evDAILYPREF, srv, item_name(current_item(menu))));
 	if ( strcmp(item_name(current_item(menu)),M_GPU_ACTIVITY_ALWAYS) == 0 )
 	    srv->opgpuactivity("always");
 	if ( strcmp(item_name(current_item(menu)),M_GPU_ACTIVITY_AUTO) == 0 )

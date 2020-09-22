@@ -28,12 +28,13 @@
 class PrefForm : public NForm
 {
   public:
-    PrefForm(int lines, int rows, Srv* srv);
+    PrefForm(int lines, int rows, Srv* srv, std::string s);
     void genfields(int& line); // Create an array of fields
     virtual void eventhandle(NEvent* ev); // Event handler
   protected:
     int         errmsgfield;
     Srv*        srv;
+    std::string title;
     std::vector<std::string> preferences =
     {
         "cpu_usage_limit",

@@ -22,10 +22,11 @@
 #include "tuievent.h"
 
 
-PrefForm::PrefForm(int rows, int cols,  Srv* srv) : NForm(rows,cols)
+PrefForm::PrefForm(int rows, int cols,  Srv* srv, std::string t) : NForm(rows,cols)
 {
     this->srv = srv;
-    settitle("Computing Preferences");
+    this->title = t + " Preferences";
+    settitle(this->title.c_str());
     // Margins
     int row = 0;
     genfields(row);
