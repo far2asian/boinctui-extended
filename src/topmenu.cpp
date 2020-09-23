@@ -93,7 +93,7 @@
 #define M_NET_ACTIVITY_NEVER		"Network activity suspend"
 #define M_COMPUTING_PREF		"Computing Preferences"
 #define M_NETWORK_PREF			"Network Preferences"
-#define M_DISKMEM_PREF			"Disk and memory Preferences"
+#define M_DISKMEM_PREF			"Disk and Memory Preferences"
 #define M_DAILYSCH_PREF			"Daily Schedule Preferences"
 //Названия пунктов меню "Help"
 #define M_ABOUT				"About"
