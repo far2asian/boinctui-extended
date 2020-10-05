@@ -37,38 +37,44 @@ class PrefForm : public NForm
     std::string type;
     std::vector<std::string> computing_preferences =
     {
-        "cpu_usage_limit",
-        "max_ncpus_pct",
-        "run_gpu_if_user_active",
-        "run_if_user_active",
-        "run_on_batteries"
+        "cpu_usage_limit",                   // Use at most % of the CPUs
+        "max_ncpus_pct",                     // Use at most % of CPU time
+        "run_on_batteries",                  // Suspend when computer is on battery
+        "run_if_user_active",                // Suspend when computer is in use
+        "run_gpu_if_user_active",            // Suspend GPU computing when computer is in use
+        "idle_time_to_run",                  // 'In use' means mouse/keyboard input in last minutes
+        "suspend_cpu_usage",                 // Suspend when non-BOINC CPU usage is above %
+        "work_buf_additional_days",          // Store up to an additional days of work
+        "work_buf_min_days",                 // Store at least days of work
+        "cpu_scheduling_period_minutes",     // Switch between tasks every minutes
+        "disk_interval"                      // Request tasks to checkpoint at most every seconds
     };
-    std::vector<std::string> preferences_other =
+    std::vector<std::string> networking_preferences =
     {
-        "confirm_before_connecting",
-        "cpu_scheduling_period_minutes",
+        "max_bytes_sec_down",                // Limit download rate to KB/second
+        "max_bytes_sec_up",                  // Limit upload rate to KB/second
+        "dont_verify_images",                // Skip data verification of image files
+        "confirm_before_connecting",         // Confirm before connecting to Internet
+        "hangup_if_dialed"                   // Disconnect when done
+    };
+    std::vector<std::string> disk_memory_preferences =
+    {
+        "disk_max_used_gb",                  // Use no more than GB
+        "disk_min_free_gb",                  // Leave at least GB free
+        "disk_max_used_pct",                 // Use no more than % of total
+        "ram_max_used_busy_pct",             // When computer is in use, use at most %
+        "ram_max_used_idle_pct",             // When computer is not in use, use at most %
+        "leave_apps_in_memory",              // Leave non-GPU tasks in memory while suspended
+        "vm_max_used_pct"                    // Page/swap file: use at most %
+    };
+    std::vector<std::string> schedule_preferences =
+    {
         "daily_xfer_limit_mb",
         "daily_xfer_period_days",
-        "disk_interval",
-        "disk_max_used_gb",
-        "disk_max_used_pct",
-        "disk_min_free_gb",
-        "dont_verify_images",
         "end_hour",
-        "hangup_if_dialed",
-        "idle_time_to_run",
-        "leave_apps_in_memory",
-        "max_bytes_sec_down",
-        "max_bytes_sec_up",
         "net_end_hour",
         "net_start_hour",
-        "ram_max_used_busy_pct",
-        "ram_max_used_idle_pct",
         "start_hour",
-        "suspend_cpu_usage",
-        "vm_max_used_pct",
-        "work_buf_additional_days",
-        "work_buf_min_days"
     };
     std::map<std::string, int> preference_fields;
     std::map<std::string, char *> preference_settings;

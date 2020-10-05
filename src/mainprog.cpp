@@ -436,7 +436,7 @@ void MainProg::eventhandle(NEvent* ev)	//обработчик событий К�
 		    Srv* srv = gsrvlist->getcursrv();
 		    if (srv != NULL)
 		    {
-			std::string title = "Daily";
+			std::string title = "Daily Schedule";
 			PrefForm* prefform = new PrefForm(30,65,srv, title);
 			insert(prefform);
 			prefform->move(getmaxy(stdscr)/2-prefform->getheight()/2,getmaxx(stdscr)/2-prefform->getwidth()/2); //центрируем

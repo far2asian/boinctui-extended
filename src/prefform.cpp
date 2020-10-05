@@ -58,36 +58,24 @@ void PrefForm::genfields(int& line) //создаст массив полей
     char buf[129];
     char* p;
     std::string pref_name;
-    std::vector<std::string> preferences = preferences_other;
+    std::vector<std::string> preferences;
     if (type == "Computing")
 	preferences = computing_preferences;
-    for (int i = 0; i < preferences.size(); i+=2)
+    else if (type == "Network")
+	preferences = networking_preferences;
+    else if (type == "Disk and Memory")
+	preferences = disk_memory_preferences;
+    else // (type == "Daily Schedule")
+	preferences = schedule_preferences;
+    for (int i = 0; i < preferences.size(); i++)
     {
         pref_name = preferences[i];
-        f = addfield(new_field(1, 20, line, 2 , 0, 0));
+        f = addfield(new_field(1, 25, line, 2 , 0, 0));
         set_field_buffer(f, 0, preferences[i].c_str());
         set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
         field_opts_off(f, O_ACTIVE); // Static text
         preference_fields[pref_name] = getfieldcount();
-        f = addfield(new_field(1, 15, line, 18, 0, 0));
-        set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
-        strncpy(buf, srv->statedom.hookptr()->findItem(pref_name.c_str())->getsvalue(), 128);
-        buf[128] = '\0';
-        p = ltrim(buf);
-        rtrim(buf);
-        set_field_buffer(f, 0, p);
-	if ((i + 1) == preferences.size())
-	{
-	    line++;
-	    break;
-	}
-	pref_name = preferences[i+1];
-        f = addfield(new_field(1, 20, line, 35 , 0, 0));
-        set_field_buffer(f, 0, preferences[i+1].c_str());
-        set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
-        field_opts_off(f, O_ACTIVE); // Static text
-        preference_fields[pref_name] = getfieldcount();
-        f = addfield(new_field(1, 15, line++, 50, 0, 0));
+        f = addfield(new_field(1, 15, line++, 30, 0, 0));
         set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
         strncpy(buf, srv->statedom.hookptr()->findItem(pref_name.c_str())->getsvalue(), 128);
         buf[128] = '\0';
@@ -124,9 +112,15 @@ void PrefForm::eventhandle(NEvent* ev) // Event handler
 	    {
 		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field does not lose value
 		kLogPrintf("PrefForm OK\n");
-		std::vector<std::string> preferences = preferences_other;
+		std::vector<std::string> preferences;
 		if (type == "Computing")
 		    preferences = computing_preferences;
+		else if (type == "Network")
+		    preferences = networking_preferences;
+		else if (type == "Disk and Memory")
+		    preferences = disk_memory_preferences;
+		else // (type == "Daily Schedule")
+		    preferences = schedule_preferences;
 	        for (int i = 0; i < preferences.size(); i++)
 		{
 		    kLogPrintf("%d\n", i);
