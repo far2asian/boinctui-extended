@@ -70,12 +70,12 @@ void PrefForm::genfields(int& line) //создаст массив полей
     for (int i = 0; i < preferences.size(); i++)
     {
         pref_name = preferences[i];
-        f = addfield(new_field(1, 25, line, 2 , 0, 0));
+        f = addfield(new_field(1, 25, line, 2 , 0, 0)); // field for code
         set_field_buffer(f, 0, preferences[i].c_str());
         set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD);
         field_opts_off(f, O_ACTIVE); // Static text
         preference_fields[pref_name] = getfieldcount();
-        f = addfield(new_field(1, 15, line++, 30, 0, 0));
+        f = addfield(new_field(1, 15, line++, 30, 0, 0)); // field for input
         set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD);
         strncpy(buf, srv->statedom.hookptr()->findItem(pref_name.c_str())->getsvalue(), 128);
         buf[128] = '\0';
