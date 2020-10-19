@@ -692,10 +692,46 @@ ProjectListSubMenu::ProjectListSubMenu(NRect rect, Srv* srv, std::string projnam
     this->srv = srv;
     this->projname = projname;
     additem(M_UPDATE_PROJECT,"");
-    additem(M_SUSPEND_PROJECT ,"");
-    additem(M_RESUME_PROJECT,"");
-    additem(M_NO_NEW_TASKS_PROJECT,"");
-    additem(M_ALLOW_NEW_TASKS_PROJECT,"");
+    if ((srv != NULL)&&(!srv->statedom.empty()))
+    {
+	Item* tmpstatedom = srv->statedom.hookptr();
+	Item* client_state = tmpstatedom->findItem("client_state");
+	if (client_state != NULL)
+	{
+	    std::vector<Item*> projects = client_state->getItems("project");
+	    for (int i = 0; i < projects.size(); i++)
+	    {
+		Item* project_name = projects[i]->findItem("project_name");
+		if (project_name != NULL)
+		{
+		    if (project_name->getsvalue()==projname)
+		    {
+		        if (projects[i]->findItem("suspended_via_gui") != NULL)
+			{
+                            additem(M_RESUME_PROJECT,"");
+			}
+			else
+			{
+                            additem(M_SUSPEND_PROJECT ,"");
+			}
+		        if (projects[i]->findItem("dont_request_more_work") != NULL)
+			{
+                            additem(M_ALLOW_NEW_TASKS_PROJECT,"");
+			}
+			else
+			{
+                            additem(M_NO_NEW_TASKS_PROJECT,"");
+			}
+		    }
+		    else
+		    {
+			continue;
+		    }
+		}
+	    }
+	}
+	srv->statedom.releaseptr(tmpstatedom);
+    }
     additem(M_RESET_PROJECT,"");
     additem(M_DETACH_PROJECT,"");
     additem(NULL,NULL);
