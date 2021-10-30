@@ -1,29 +1,29 @@
 # Generate RPM using:
 #   $ cd ~
 #   $ rpmdev-setuptree
-#   $ git clone https://github.com/suleman1971/boinctui
-#   $ patch -p0 < boinctui-makefile.patch
-#   $ cd boinctui
+#   $ git clone https://github.com/mpentler/boinctui-extended
+#   $ patch -p0 < boinctui-extended-makefile.patch
+#   $ cd boinctui-extended
 #   $ autoconf
 #   $ ./configure --without-gnutls
 #   $ make srctgz
 #   $ cd ..
-#   $ mv boinctui_2.5.0.orig.tar.gz rpmbuild/SOURCES/
-#   $ rm -rf boinctui*
+#   $ mv boinctui-extended_1.0.3.orig.tar.gz rpmbuild/SOURCES/
+#   $ rm -rf boinctui-extended*
 #   $ cd rpmbuild/SPECS
-#   $ rpmbuild -bb boinctui.spec
+#   $ rpmbuild -bb boinctui-extended.spec
 #   $ ls ../RPMS/
 
-Name:           boinctui
-Version:        2.5.1
+Name:           boinctui-extended
+Version:        1.0.3
 Release:        1%{?dist}
 Summary:        Fullscreen Text Mode Manager For BOINC Client
 Group:          Applications/Communications
 
 License:        GPLv3+
-URL:            https://github.com/suleman1971/boinctui
-# Source0:        http://download.sourceforge.net/project/boinctui/boinctui_%{version}.tar.gz
-Source0:        ../boinctui_%{version}.tar.gz
+URL:            https://github.com/mpentler/boinctui-extended
+# Source0:        http://download.sourceforge.net/project/boinctui-extended/boinctui-extended_%{version}.tar.gz
+Source0:        ../boinctui-extended_%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  gcc
@@ -36,10 +36,10 @@ Requires:       expat
 Requires:       openssl
 
 %description
- boinctui is a fullscreen text mode control tool for BOINC client
+ boinctui-extended is a fullscreen text mode control tool for BOINC client
  It can manage local and remote clients (via boinc RPC), and allows
  you to switch between  clients with a hot key.
- boinctui uses curses library and provides the following features:
+ boinctui-extended uses curses library and provides the following features:
   * Fullscreen curses based text user interface
   * Switch between several BOINC clients hosts via hot key
   * View task list (run, queue, suspend e.t.c state)

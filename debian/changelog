@@ -1,4 +1,5 @@
-boinctui (2.5.1-1) unstable; urgency=low
+boinctui-extended (v1.0.3) unstable; urgency=low
+ # Added changes from boinctui (2.5.1)
 
   * implemented "Project/Add Project by URL" menu item
 
@@ -8,7 +9,35 @@ boinctui (2.5.1-1) unstable; urgency=low
 
   * file gpl-3.0.txt included to source package
 
- -- Sergey Suslov <suleman1971@gmail.com>  Wed, 02 Sep 2020 17:31:00 +0300
+boinctui-extended (v1.0.2) unstable; urgency=low
+
+  * added a new feature! Hosts can now have an optional name saved with them too.
+
+boinctui-extended (v1.0.1) unstable; urgency=low
+
+  * added a host counter to the status bar - useful?
+
+boinctui-extended (v1.0.0) unstable; urgency=low
+
+  * project renamed (seems to be the polite way)
+
+  * added "P" to switch to the previous server in the list (me)
+
+  * added "M" as a menu hot key (by zeekec)
+
+  * added greater precision to time display (by zeekec)
+
+  * converted code comments to English (WIP - 1/3ish done)
+
+  * fixed some UI typos and changed some strings (me)
+
+  * added documentation (me)
+
+  * added changes to build enironment files (by zeekec)
+
+  * added transparent backgrounds (by DerVerruckteFuchs)
+
+  * general code improvements and bug fixes including running through cppcheck (by various people)
 
 boinctui (2.5.0-1) unstable; urgency=low
 
