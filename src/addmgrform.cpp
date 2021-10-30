@@ -175,7 +175,7 @@ void AddAccMgrForm::eventhandle(NEvent* ev) // Event handler
 {
     if ( ev->done )
 	return;
-    NMouseEvent* mevent = (NMouseEvent*)ev;
+    //NMouseEvent* mevent = (NMouseEvent*)ev;
     if ( ev->type == NEvent::evMOUSE)
     {
 	NForm::eventhandle(ev); //предок

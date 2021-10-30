@@ -28,10 +28,11 @@
 class AddProjectForm : public NForm
 {
   public:
-    AddProjectForm(int lines, int rows, Srv* srv, const char* projname, bool userexist);
+    AddProjectForm(int lines, int rows, Srv* srv, const char* projname, bool userexist, bool byurl);
     void genfields(int& line, Item* project); // Create an array of fields
     virtual void eventhandle(NEvent* ev); // Event handler
   protected:
+    int   projurlfield;
     int		emailfield;
     int		passwfield;
     int		errmsgfield;
@@ -41,6 +42,7 @@ class AddProjectForm : public NForm
     std::string projname;	// Project name
     std::string projurl;	// Project URL
     bool	userexist;	// True if the user is already created
+    bool  byurl; //сделать строку url редактируемой
 };
 
 

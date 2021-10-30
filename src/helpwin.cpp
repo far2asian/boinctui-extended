@@ -40,7 +40,7 @@ HelpWin::HelpWin(int rows, int cols) : NGroup(NRect(rows, cols, getmaxy(stdscr)/
     text1->appendstring(attr2,"       \"C\"           - Edit configuration\n");
     text1->appendstring(attr2,"       \"Q\"           - Quit boinctui\n");
     text1->appendstring(attr2,"       \"F9\"/\"M\"      - Toggle main menu\n");
-    text1->appendstring(attr2,"       \"PgUp\"/\"PgDn\" - Scroll messages window\n");
+    text1->appendstring(attr2,"       \"PgUp\"/\"PgDn\" - Scroll Messages Window\n");
     text1->appendstring(attr2,"\n");
     text1->appendstring(attr1,"   Task Controls:\n");
     text1->appendstring(attr2,"       \"Up\"/\"Dn\"     - Select task\n");

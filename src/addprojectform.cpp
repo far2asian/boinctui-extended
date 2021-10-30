@@ -46,12 +46,13 @@ char* strlowcase(char* s) // To lower case
 }
 
 
-AddProjectForm::AddProjectForm(int rows, int cols,  Srv* srv, const char* projname, bool userexist) : NForm(rows,cols)
+AddProjectForm::AddProjectForm(int rows, int cols,  Srv* srv, const char* projname, bool userexist, bool byurl) : NForm(rows,cols)
 {
     this->srv = srv;
     settitle(projname);
     this->projname = projname;
     this->userexist = userexist;
+    this->byurl = byurl;
     Item* project = NULL;
     if (srv !=NULL)
 	project = srv->findprojectbynamefromall(projname);
@@ -79,21 +80,21 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 {
     FIELD* f;
     delfields();
+    //сообщение об ошибке
+    errmsgfield = getfieldcount();
+    f = addfield(new_field(1, getwidth()-2, line++, 0, 0, 0));
+    if (!f)
+	ERROREX();
+    if (E_OK != set_field_buffer(f, 0, "Error"))
+	ERROREX();
+    if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD))
+	ERROREX();
+    if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
+	ERROREX();
+    if (E_OK != field_opts_off(f, O_VISIBLE)) // Default is invisible
+	ERROREX();
     if (project != NULL)
     {
-	// Error message
-	errmsgfield = getfieldcount();
-	f = addfield(new_field(1, getwidth()-2, line++, 0, 0, 0));
-	if (!f)
-	    ERROREX();
-	if (E_OK != set_field_buffer(f, 0, "Error"))
-	    ERROREX();
-	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_RED) | A_BOLD))
-	    ERROREX();
-	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
-	    ERROREX();
-	if (E_OK != field_opts_off(f, O_VISIBLE)) // Default is invisible
-	    ERROREX();
 	//url
 	Item* url = project->findItem("url");
 	std::string s = "url          : ";
@@ -107,7 +108,7 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	// Major project category
+	//area
 	Item* general_area = project->findItem("general_area");
 	s = "General area : ";
 	if (general_area !=NULL)
@@ -121,7 +122,7 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	// Minor project category
+	//specific area
 	Item* specific_area = project->findItem("specific_area");
 	s = "Specific area: ";
 	if (specific_area !=NULL)
@@ -135,7 +136,7 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	// Project location
+	//home
 	s = "Home         : ";
 	Item* home = project->findItem("home");
 	if (home !=NULL)
@@ -149,7 +150,7 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 	    ERROREX();
 	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
-	// Project description
+	//description
 	s = "Description  : ";
 	line++;
 	Item* description = project->findItem("description");
@@ -168,7 +169,7 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
 	    ERROREX();
 	line += h+1;
-	// Project's supported platforms
+	//platforms
 	Item* platforms = project->findItem("platforms");
 	s = "Platforms    : ";
 	if (platforms !=NULL)
@@ -197,7 +198,30 @@ void AddProjectForm::genfields(int& line, Item* project) // Create an array of f
 	    ERROREX();
 	line += h + 1;
     }
-    // Email address
+
+    //project URL
+    if (byurl)
+    {
+	line++;
+	f = addfield(new_field(1, 10, line, 1 , 0, 0));
+	if (!f)
+	    ERROREX();
+	if (E_OK != set_field_buffer(f, 0, "ProjectURL"))
+	    ERROREX();
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,-1) | A_BOLD))
+	    ERROREX();
+	if (E_OK != field_opts_off(f, O_ACTIVE)) // Static text
+	    ERROREX();
+	projurlfield = getfieldcount();
+	f = addfield(new_field(1, 40, line++, 15, 0, 0));
+	if (!f)
+	    ERROREX();
+	if (E_OK != field_opts_off(f, O_AUTOSKIP))
+	    ERROREX();
+	if (E_OK != set_field_back(f, getcolorpair(COLOR_WHITE,COLOR_CYAN) | A_BOLD))
+	    ERROREX();
+    }
+    //email
     line++;
     f = addfield(new_field(1, 10, line, 1 , 0, 0));
     if (!f)
@@ -296,7 +320,7 @@ void AddProjectForm::eventhandle(NEvent* ev) // Event handler
 {
     if ( ev->done )
 	return;
-    NMouseEvent* mevent = (NMouseEvent*)ev;
+    //NMouseEvent* mevent = (NMouseEvent*)ev;
     if ( ev->type == NEvent::evMOUSE)
     {
 	NForm::eventhandle(ev); //предок
@@ -311,8 +335,10 @@ void AddProjectForm::eventhandle(NEvent* ev) // Event handler
 	    {
 		form_driver(frm, REQ_NEXT_FIELD); // Hack so that the current field doesn't lose value
 		char* email = strlowcase(rtrim(field_buffer(fields[emailfield],0)));
+		if (byurl)
+			projurl = rtrim(field_buffer(fields[projurlfield],0));
 		char* passw = rtrim(field_buffer(fields[passwfield],0));
-		kLogPrintf("AddProjectForm OK name=[%s] url=[%s] email=[%s]\n passw=[%s]\n", projname.c_str(), projurl.c_str(), email, passw);
+		kLogPrintf("AddProjectForm OK name=[%s] url=[%s] email=[%s] passw=[%s]\n", projname.c_str(), projurl.c_str(), email, passw);
 		if (srv!=NULL)
 		{
 		    std::string errmsg;

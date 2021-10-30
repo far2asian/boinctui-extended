@@ -1,5 +1,5 @@
 TARGET  = boinctui-extended
-VERSION = 1.0.2
+VERSION = 1.0.3
 #DEFS   += -DVERSION=$(VERSION)
 #DEFS   += -DDEBUG
 DEFS   += -DENABLEMOUSE

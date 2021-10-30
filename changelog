@@ -1,3 +1,14 @@
+boinctui-extended (v1.0.3)
+Added changes from boinctui (2.5.1)
+
+  * implemented "Project/Add Project by URL" menu item
+
+  * rpm spec file updated
+
+  * fixed some build warnings
+
+  * file gpl-3.0.txt included to source package
+
 boinctui-extended (v1.0.2)
 
   * added a new feature! Hosts can now have an optional name saved with them too.

@@ -136,7 +136,7 @@ void InfoPanel::refresh()
     }
     // Projects
     mvwprintw(win, line++,0,"\n");
-    for (int i = 0; i < projects.size(); i++) // Iterate through projects
+    for (int i = 0; i < (int)projects.size(); i++) // Iterate through projects
     {
 	// Calculate how many rows are needed
 	int needlines = 2;
