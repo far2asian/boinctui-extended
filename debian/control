@@ -1,7 +1,7 @@
 Source: boinctui-extended
 Section: net
 Priority: optional
-Maintainer: Sergey Suslov <mpentler@gmail.com>
+Maintainer: Sergey Suslov <suleman1971@gmail.com>
 Build-Depends: autoconf, debhelper (>= 9), debhelper-compat (= 12),
  libncursesw5-dev, libgnutls-openssl-dev, libexpat1-dev
 Standards-Version: 4.5.0
