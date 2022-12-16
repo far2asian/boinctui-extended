@@ -1,3 +1,5 @@
+## Someone PLEASE take over this project. I genuinely don't care anymore and don't even do any distributed computing.
+
 # boinctui-extended
 Original code by Sergey Suslov (suleman1971@gmail.com)  
 Improved build by Mark Pentler (https://github.com/mpentler/)  
