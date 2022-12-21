@@ -1,4 +1,4 @@
-## Someone PLEASE take over this project. I genuinely don't care anymore and don't even do any distributed computing.
+## Update 21st Dec 2022 - Most of the changes below have now been incorporated into suleman1971's upstream repo, so I would definitely advise that you download that project instead. I will not be maintaining this anymore, and I don't even do any distributed computed work these days.
 
 # boinctui-extended
 Original code by Sergey Suslov (suleman1971@gmail.com)  
